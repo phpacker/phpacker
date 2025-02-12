@@ -1,0 +1,35 @@
+{
+    "name": "phpacker/phpacker",
+    "description": "Package a PHP script as a standalone cross-platform binary wihout the hassle",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "PHPacker\\PHPacker\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "gwleuverink",
+            "email": "willem@leuver.ink"
+        }
+    ],
+    "extra": {
+        "thanks": [
+            {
+                "name": "Static PHP CLI",
+                "url": "https://github.com/crazywhalecc/static-php-cli"
+            },
+            {
+                "name": "phpmicro",
+                "url": "https://github.com/easysoft/phpmicro"
+            },
+            {
+                "name": "NativePHP",
+                "url": "https://github.com/nativephp/php-bin"
+            }
+        ]
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
