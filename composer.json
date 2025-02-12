@@ -31,5 +31,7 @@
         ]
     },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "symfony/console": "7.3.x-dev"
+    }
 }
