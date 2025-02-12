@@ -1,6 +1,6 @@
 {
     "name": "phpacker/phpacker",
-    "description": "Package a PHP script as a standalone cross-platform binary wihout the hassle",
+    "description": "Package a PHP script as a standalone cross-platform binary. Convenience wrapper around static-php & phpmicro using general-purpose php binaries",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -30,8 +30,9 @@
             }
         ]
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
-        "symfony/console": "7.3.x-dev"
+        "symfony/console": "^7.2",
+        "laravel/prompts": "^0.3"
     }
 }
