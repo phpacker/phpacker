@@ -17,7 +17,7 @@ use function Laravel\Prompts\error;
 
 #[AsCommand(
     name: 'build',
-    description: 'Package standalone binary'
+    description: 'Package standalone executable'
 )]
 class Build extends Command
 {
