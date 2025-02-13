@@ -32,7 +32,7 @@ trait WithIniOption
         // CWD phpacker.ini
         $defaultIniPath = getcwd() . '/phpacker.ini';
         if (file_exists($defaultIniPath)) {
-            info('Using ./' . basename($defaultIniPath));
+            info('Detected ./' . basename($defaultIniPath));
 
             return $this->parseIni(file_get_contents($defaultIniPath));
         }
