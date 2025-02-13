@@ -3,8 +3,11 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Symfony\Component\Console\Application;
+use NunoMaduro\Collision\Provider;
 use PHPacker\PHPacker\Command\Build;
+use Symfony\Component\Console\Application;
+
+(new Provider)->register();
 
 $application = new Application('phpacker', '1.0.0');
 $application->add(new Build());
