@@ -4,20 +4,12 @@ namespace PHPacker\PHPacker\Command\Concerns;
 
 use Symfony\Component\Filesystem\Path;
 
+// TODO: maybe put all interactions with the
 trait WithVersions
 {
-    use InteractsWithRepository;
-
     protected function currentVersion(string $repositoryDir): ?string
     {
         return @file_get_contents(Path::join($repositoryDir, 'version'));
-    }
-
-    protected function latestVersion(): ?string
-    {
-        $response = @$this->repository()->releaseData();
-
-        return $response['tag_name'] ?? null;
     }
 
     protected function setCurrentVersion(string $repositoryDir, string $version)

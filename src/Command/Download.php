@@ -15,6 +15,7 @@ use PHPacker\PHPacker\Exceptions\RepositoryRequestException;
 use PHPacker\PHPacker\Command\Concerns\InteractsWithRepository;
 
 use function Laravel\Prompts\info;
+use function Laravel\Prompts\spin;
 use function Laravel\Prompts\error;
 
 #[AsCommand(
@@ -75,18 +76,26 @@ class Download extends Command
 
     protected function fetchLatest()
     {
-        $this->currentVersion
-            ? info("Updating {$this->repository}:{$this->currentVersion}->{$this->latestVersion}'")
-            : info("Downloading {$this->repository}:{$this->latestVersion}");
-
         $releaseData = $this->repository()->releaseData();
 
         if (! isset($releaseData['assets'])) {
             throw new CommandErrorException("No assets found in the release.\n");
         }
 
-        $zipPath = $this->repository()->downloadReleaseAssets($this->repositoryDir);
-        $this->setCurrentVersion($this->repositoryDir, $this->latestVersion);
+        $message = $this->currentVersion
+            ? "Updating {$this->repository}:{$this->currentVersion} -> {$this->latestVersion}"
+            : "Downloading {$this->repository}:{$this->latestVersion}";
+
+        spin(
+            message: $message,
+            callback: function () {
+                $zipPath = $this->repository()->downloadReleaseAssets($this->repositoryDir);
+                // TODO: Unpack repo & repositories
+                // TODO: Cleanup temporary directories & zip
+
+                $this->setCurrentVersion($this->repositoryDir, $this->latestVersion);
+            }
+        );
     }
 
     protected function prepareDirectory()
@@ -111,7 +120,7 @@ class Download extends Command
 
         $this->repositoryDir = Path::join($baseDir, 'binaries', $dirName);
         $this->currentVersion = $this->currentVersion($this->repositoryDir);
-        $this->latestVersion = $this->latestVersion();
+        $this->latestVersion = $this->repository()->latestVersion();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

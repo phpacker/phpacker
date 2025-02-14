@@ -71,4 +71,11 @@ class GitHub implements RemoteRepositoryService
             fclose($localStream);
         }
     }
+
+    public function latestVersion(): ?string
+    {
+        $response = @$this->releaseData();
+
+        return $response['tag_name'] ?? null;
+    }
 }
