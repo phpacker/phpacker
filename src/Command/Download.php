@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Command\Concerns\WithVersions;
 use Symfony\Component\Console\Output\OutputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
-use PHPacker\PHPacker\Command\Concerns\InteractsWithRepository;
+use PHPacker\PHPacker\Command\Concerns\InteractsWithGitHub;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\error;
@@ -22,7 +22,7 @@ use function Laravel\Prompts\error;
 )]
 class Download extends Command
 {
-    use InteractsWithRepository;
+    use InteractsWithGitHub;
     use WithVersions;
 
     const DEFAULT_REPOSITORY = 'phpacker/php-bin';
@@ -66,6 +66,8 @@ class Download extends Command
 
             return;
         }
+
+        // TODO: Actually handle version strings?
 
         $this->fetchLatest();
     }

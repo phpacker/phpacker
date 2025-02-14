@@ -6,7 +6,7 @@ use Symfony\Component\Filesystem\Path;
 
 trait WithVersions
 {
-    use InteractsWithRepository;
+    use InteractsWithGitHub;
 
     protected function currentVersion(string $repositoryDir): ?string
     {
