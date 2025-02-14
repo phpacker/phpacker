@@ -60,8 +60,7 @@ class GitHub implements RemoteRepositoryService
 
         // Keep it simple
         try {
-            $bytesCopied = stream_copy_to_stream($remoteStream, $localStream);
-            if ($bytesCopied === false) {
+            if (! stream_copy_to_stream($remoteStream, $localStream)) {
                 throw new RepositoryRequestException("Failed to copy stream to '{$zipPath}'");
             }
 
