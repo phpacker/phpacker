@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Command\Concerns\WithVersions;
 use Symfony\Component\Console\Output\OutputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
-use PHPacker\PHPacker\Command\Concerns\InteractsWithGitHub;
+use PHPacker\PHPacker\Command\Concerns\InteractsWithRepository;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\error;
@@ -22,7 +22,7 @@ use function Laravel\Prompts\error;
 )]
 class Download extends Command
 {
-    use InteractsWithGitHub;
+    use InteractsWithRepository;
     use WithVersions;
 
     const DEFAULT_REPOSITORY = 'phpacker/php-bin';
@@ -78,20 +78,14 @@ class Download extends Command
             ? info("Updating {$this->repository}:{$this->currentVersion}->{$this->latestVersion}'")
             : info("Downloading {$this->repository}:{$this->latestVersion}");
 
-        $releaseData = $this->releaseData($this->repository);
+        $releaseData = $this->repository()->releaseData();
 
         if (! isset($releaseData['assets'])) {
             throw new CommandErrorException("No assets found in the release.\n");
         }
 
-        $releaseAssets = $this->downloadReleaseAssets($this->repository);
-
-        if ($releaseAssets === false) {
-            throw new CommandErrorException("Failed to download {$this->repository}:{$this->latestVersion}");
-        }
-
-        file_put_contents(Path::join($this->repositoryDir, 'download.zip'), $releaseAssets);
-        $this->setLatestVersion($this->repositoryDir, $this->latestVersion);
+        $zipPath = $this->repository()->downloadReleaseAssets();
+        $this->setCurrentVersion($this->repositoryDir, $this->latestVersion);
     }
 
     protected function prepareDirectory()
