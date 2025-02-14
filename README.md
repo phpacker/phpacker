@@ -1,11 +1,6 @@
-# phpacker
+# PHPacker
 
-| Platform | Architectures |
-| -------- | ------------- |
-| mac      | arm, x64      |
-| linux    | arm, x64      |
-| windows  | x64           |
-| all      | -             |
+Package any PHP script or PHAR into a standalone, cross-platform executable. Say hello to seamless PHP CLI distribution!
 
 ```bash
 # builds mac-arm only
@@ -15,7 +10,15 @@ phpacker build mac arm --src=./app.php
 phpacker build all --src=./app.php
 ```
 
-Your executables will be generated in `{src-root}/build`. You may change this behaviour using the `--dest=./custom-build-path` option.
+Your executables will be generated in `{src-root}/build`. You may change this behavior using the `--dest=./custom-build-path` option.
+
+## Supported Platforms and Architectures
+
+| Platform | Architectures |
+| -------- | ------------- |
+| mac      | arm, x64      |
+| linux    | arm, x64      |
+| windows  | x64           |
 
 ## Customize PHP ini
 
@@ -25,13 +28,13 @@ You can define custom PHP ini definitions by using the `--ini` flag.
 # will detect phpacker.ini in the src-root - or prompt interactively
 phpacker build all --src=./app.php --ini
 
-# alternatevely you may provide a path
+# alternatively you may provide a path
 phpacker build all --src=./app.php --ini=./custom-ini-path.ini
 ```
 
 ## Updating the PHP binaries
 
-The `build` command will check for updates automatically. If you wish you can check for updates manually.
+The `build` command will check for updates automatically. If you wish, you can check for updates manually.
 
 ```bash
 # update pre-built binaries
@@ -49,17 +52,17 @@ phpacker download "{org}/{user}/php-bin"
 
 **in progress**
 
-Every arguments you can pass to the `build` command is settable in a config file. This config will automatically be used when running `build` witout any arguments.
+Every argument you can pass to the `build` command is settable in a config file. This config will automatically be used when running `build` without any arguments.
 
 ```json
 {
   "platform": "all",
   "architectures": [],
-  "bin": "{org}/{user}/php-bin", # defaults to phpacker/php-bin
+  "bin": "{org}/{user}/php-bin" // defaults to phpacker/php-bin
 }
 ```
 
-By default phpacker will look for a `phpacker.json` file in the same directory as the build `src` option. Alternatively you may pass a custom path to a config file.
+By default, PHPacker will look for a `phpacker.json` file in the same directory as the build `src` option. Alternatively, you may pass a custom path to a config file.
 
 ```bash
 # you can provide a config path.
@@ -67,32 +70,30 @@ By default phpacker will look for a `phpacker.json` file in the same directory a
 phpacker build all --src=./app.php --config=./custom-config-path.json
 ```
 
-## Custom php builds
+## Custom PHP builds
 
 **in progress**
 
-PHPacker uses pre-built staticly linked PHP binaries in order to enable cross-compilation. Custom binaries need to be built on the platforms they are intended for.
+PHPacker uses pre-built statically linked PHP binaries in order to enable cross-compilation. Custom binaries need to be built on the platforms they are intended for.
 
 We aim to make this as simple as possible by providing a GitHub Workflow that generates these binaries.
 
-To use your own you need to:
+To use your own, you need to:
 
 - clone the [php-bin](https://github.com/phpacker/php-bin) repo
-- update php-extensions.txt - See the [extension list](https://static-php.dev/en/guide/extensions.html) to see what's supported
+- update `php-extensions.txt` - See the [extension list](https://static-php.dev/en/guide/extensions.html) to see what's supported
 - run the workflows, merge all pull requests & tag a release
 
-To use your custom binaries you need to set the repository url. You can do this by adding it to your `phpacker.json` file in the src-root. PHPacker will pick this up automatically during the build.
+To use your custom binaries, you need to set the repository URL. You can pass a repo directly as a command option.
+
+```bash
+phpacker build all --src=./app.php --bin='{org}/{user}/php-bin'
+```
+
+Recommended, however, is storing this option in the `phpacker.json` file. PHPacker will pick this up automatically during the build.
 
 ```json
 {
   "bin": "{org}/{user}/php-bin"
 }
-```
-
-Alternatively you may pass a repo directly as a command option
-
-```bash
-# you can provide a config path.
-# phpacker.json will always be used unless this option is given
-phpacker build all --src=./app.php --config=./custom-config-path.json
 ```
