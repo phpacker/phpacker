@@ -4,7 +4,7 @@ namespace PHPacker\PHPacker\Command\Concerns;
 
 trait InteractsWithGitHub
 {
-    protected function repositoryData(string $repository): ?array
+    protected function releaseData(string $repository): ?array
     {
         return once(function () use ($repository) {
             $url = "https://api.github.com/repos/{$repository}/releases/latest";

@@ -15,7 +15,7 @@ trait WithVersions
 
     protected function latestVersion(string $repository): ?string
     {
-        $response = @$this->repositoryData($repository);
+        $response = @$this->releaseData($repository);
 
         return $response['tag_name'] ?? null;
     }

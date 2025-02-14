@@ -78,7 +78,25 @@ class Download extends Command
             ? info("Updating {$this->repository}:{$this->currentVersion}->{$this->latestVersion}'")
             : info("Downloading {$this->repository}:{$this->latestVersion}");
 
-        print_r($this->repositoryData($this->repository)['zipball_url']);
+        $releaseData = $this->releaseData($this->repository);
+
+        if (! isset($releaseData['assets'])) {
+            throw new CommandErrorException("No assets found in the release.\n");
+        }
+
+        // Download file with file_get_contents
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+            ],
+        ]);
+
+        $releaseAssets = file_get_contents($releaseData['zipball_url'], false, $context);
+        if ($releaseAssets === false) {
+            throw new CommandErrorException("Failed to download {$this->repository}:{$this->latestVersion}");
+        }
+
+        file_put_contents(Path::join($this->repositoryDir, 'download.zip'), $releaseAssets);
     }
 
     protected function prepareDirectory()
@@ -109,7 +127,7 @@ class Download extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $this->download($input, $output);
+            $this->download();
 
             return Command::SUCCESS;
         } catch (CommandErrorException $e) {
