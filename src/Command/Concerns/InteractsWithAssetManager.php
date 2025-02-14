@@ -2,7 +2,7 @@
 
 namespace PHPacker\PHPacker\Command\Concerns;
 
-use PHPacker\PHPacker\Services\AssetManager;
+use PHPacker\PHPacker\Support\AssetManager;
 
 trait InteractsWithAssetManager
 {

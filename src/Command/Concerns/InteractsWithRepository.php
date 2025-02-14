@@ -2,7 +2,7 @@
 
 namespace PHPacker\PHPacker\Command\Concerns;
 
-use PHPacker\PHPacker\Services\GitHub;
+use PHPacker\PHPacker\Support\GitHub;
 use PHPacker\PHPacker\Contracts\RemoteRepositoryService;
 
 trait InteractsWithRepository

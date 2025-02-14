@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPacker\PHPacker\Services;
+namespace PHPacker\PHPacker\Support;
 
 use ZipArchive;
 use RuntimeException;
