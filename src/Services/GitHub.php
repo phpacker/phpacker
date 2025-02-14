@@ -3,13 +3,13 @@
 namespace PHPacker\PHPacker\Services;
 
 use Symfony\Component\Filesystem\Path;
+use PHPacker\PHPacker\Contracts\RemoteRepositoryService;
 use PHPacker\PHPacker\Exceptions\RepositoryRequestException;
 
-class GitHub
+class GitHub implements RemoteRepositoryService
 {
     public function __construct(
         protected string $repository,
-        protected string $repositoryDir
     ) {}
 
     public function releaseData(): ?array
@@ -32,7 +32,7 @@ class GitHub
         });
     }
 
-    public function downloadReleaseAssets(): string
+    public function downloadReleaseAssets(string $destination): string
     {
         $context = stream_context_create([
             'http' => [
@@ -40,7 +40,7 @@ class GitHub
             ],
         ]);
 
-        $zipPath = Path::join($this->repositoryDir, 'latest.zip');
+        $zipPath = Path::join($destination, 'latest.zip');
         $downloadUrl = $this->releaseData()['zipball_url'];
 
         // Make sure zip file is present & empty

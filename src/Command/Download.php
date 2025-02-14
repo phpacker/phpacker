@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Command\Concerns\WithVersions;
 use Symfony\Component\Console\Output\OutputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
+use PHPacker\PHPacker\Exceptions\RepositoryRequestException;
 use PHPacker\PHPacker\Command\Concerns\InteractsWithRepository;
 
 use function Laravel\Prompts\info;
@@ -84,7 +85,7 @@ class Download extends Command
             throw new CommandErrorException("No assets found in the release.\n");
         }
 
-        $zipPath = $this->repository()->downloadReleaseAssets();
+        $zipPath = $this->repository()->downloadReleaseAssets($this->repositoryDir);
         $this->setCurrentVersion($this->repositoryDir, $this->latestVersion);
     }
 
@@ -108,9 +109,9 @@ class Download extends Command
             ? self::DEFAULT_REPOSITORY_DIR
             : $this->repository;
 
-        $this->repositoryDir = Path::join($baseDir, $dirName);
+        $this->repositoryDir = Path::join($baseDir, 'binaries', $dirName);
         $this->currentVersion = $this->currentVersion($this->repositoryDir);
-        $this->latestVersion = $this->latestVersion($this->repository);
+        $this->latestVersion = $this->latestVersion();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -119,7 +120,7 @@ class Download extends Command
             $this->download();
 
             return Command::SUCCESS;
-        } catch (CommandErrorException $e) {
+        } catch (CommandErrorException|RepositoryRequestException $e) {
             error($e->getMessage());
 
             return Command::FAILURE;
