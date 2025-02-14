@@ -1,5 +1,9 @@
 name: format
-on: pull_request
+
+on:
+  - pull_request
+  - workflow_dispatch
+
 jobs:
   phplint:
     runs-on: ubuntu-latest
