@@ -31,11 +31,12 @@
         ]
     },
     "require": {
-        "symfony/console": "^7.2",
         "laravel/prompts": "^0.3",
-        "symfony/filesystem": "^7.2",
         "nunomaduro/collision": "^8.6",
-        "spatie/once": "^3.1"
+        "spatie/once": "^3.1",
+        "symfony/console": "^7.2",
+        "symfony/filesystem": "^7.2",
+        "symfony/finder": "^7.2"
     },
     "require-dev": {
         "laravel/pint": "^1.20",
