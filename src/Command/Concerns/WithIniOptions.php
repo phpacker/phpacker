@@ -9,7 +9,7 @@ use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\textarea;
 
-trait WithIniOption
+trait WithIniOptions
 {
     /*
      * When the --ini option is given without input, it'll look for a ./phpacker.ini file

@@ -7,8 +7,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use PHPacker\PHPacker\Command\Concerns\WithIniOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use PHPacker\PHPacker\Command\Concerns\WithIniOptions;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use PHPacker\PHPacker\Command\Concerns\WithBuildArguments;
 
@@ -22,7 +22,7 @@ use function Laravel\Prompts\error;
 class Build extends Command
 {
     use WithBuildArguments;
-    use WithIniOption;
+    use WithIniOptions;
 
     private const PLATFORMS = [
         'mac' => ['arm', 'x64'],
