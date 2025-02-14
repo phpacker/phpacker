@@ -32,12 +32,13 @@
     },
     "require": {
         "symfony/console": "^7.2",
-        "laravel/prompts": "^0.3"
+        "laravel/prompts": "^0.3",
+        "symfony/filesystem": "^7.2",
+        "nunomaduro/collision": "^8.6"
     },
     "require-dev": {
         "laravel/pint": "^1.20",
-        "phpstan/phpstan": "^2.1",
-        "nunomaduro/collision": "^8.6"
+        "phpstan/phpstan": "^2.1"
     },
     "scripts": {
         "format": "./vendor/bin/pint",

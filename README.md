@@ -45,7 +45,7 @@ To use your custom binaries you need to set the repository url. You can do this 
 
 ```json
 {
-  "bin": "https://github.com/{username}/php-bin"
+  "bin": "{org}/{user}/php-bin"
 }
 ```
 
