@@ -84,19 +84,14 @@ class Download extends Command
             throw new CommandErrorException("No assets found in the release.\n");
         }
 
-        // Download file with file_get_contents
-        $context = stream_context_create([
-            'http' => [
-                'method' => 'GET',
-            ],
-        ]);
+        $releaseAssets = $this->downloadReleaseAssets($this->repository);
 
-        $releaseAssets = file_get_contents($releaseData['zipball_url'], false, $context);
         if ($releaseAssets === false) {
             throw new CommandErrorException("Failed to download {$this->repository}:{$this->latestVersion}");
         }
 
         file_put_contents(Path::join($this->repositoryDir, 'download.zip'), $releaseAssets);
+        $this->setLatestVersion($this->repositoryDir, $this->latestVersion);
     }
 
     protected function prepareDirectory()
@@ -108,9 +103,9 @@ class Download extends Command
     {
         // Store in OS-specific app data directory
         $baseDir = match (PHP_OS_FAMILY) {
-            'Darwin' => Path::join(getenv('HOME'), '.my-app'),
-            'Windows' => Path::join(getenv('LOCALAPPDATA'), 'my-app'),
-            default => Path::join(getenv('XDG_DATA_HOME') ?: Path::join(getenv('HOME'), '.my-app'))
+            'Darwin' => Path::join(getenv('HOME'), '.phpacker'),
+            'Windows' => Path::join(getenv('LOCALAPPDATA'), 'phpacker'),
+            default => Path::join(getenv('XDG_DATA_HOME') ?: Path::join(getenv('HOME'), '.phpacker'))
         };
 
         $this->repository = $input->getArgument('repository');

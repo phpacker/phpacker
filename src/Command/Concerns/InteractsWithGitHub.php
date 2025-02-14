@@ -23,4 +23,16 @@ trait InteractsWithGitHub
             return json_decode($response, true);
         });
     }
+
+    protected function downloadReleaseAssets(string $repository)
+    {
+        // Download file with file_get_contents
+        $context = stream_context_create([
+            'http' => [
+                'header' => 'User-Agent: PHPacker',
+            ],
+        ]);
+
+        return file_get_contents($this->releaseData($repository)['zipball_url'], false, $context);
+    }
 }
