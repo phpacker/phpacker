@@ -17,13 +17,6 @@ class AssetManager
         $this->prepareDirectory();
     }
 
-    public function prepareDirectory()
-    {
-        if (! is_dir($this->repositoryDir)) {
-            mkdir($this->repositoryDir);
-        }
-    }
-
     public function currentVersion(): ?string
     {
         return @file_get_contents(Path::join($this->repositoryDir, '_version'));
@@ -46,6 +39,13 @@ class AssetManager
             // Extract archive
             $this->unzip($zipPath, $tempDir);
 
+            // Check if the bin directory exists
+            $binDir = glob($tempDir . '//*//bin', GLOB_ONLYDIR);
+            if (empty($binDir)) {
+                $this->purgeRepositoryDirIfNew();
+                throw new FileNotFoundException('Bin directory not found in unpacked archive');
+            }
+
             // Find all binaries in the $binDir
             $files = Finder::create()
                 ->files()
@@ -53,6 +53,7 @@ class AssetManager
                 ->name('*.zip');
 
             if (! count($files)) {
+                $this->purgeRepositoryDirIfNew();
                 throw new FileNotFoundException("No PHP binaries found in downloaded release '{repository}/bin'");
             }
 
@@ -73,6 +74,19 @@ class AssetManager
         }
     }
 
+    public function prepareDirectory()
+    {
+        if (! is_dir($this->repositoryDir)) {
+            print_r($this->repositoryDir);
+            mkdir($this->repositoryDir);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Support
+    |--------------------------------------------------------------------------
+    */
     private function unzip($src, $dest)
     {
         $zip = new ZipArchive;
@@ -86,6 +100,15 @@ class AssetManager
             $zip->close();
         } else {
             throw new RuntimeException("Unable to open zip file '{$src}'");
+        }
+    }
+
+    /* Ensure no download artifacts linger after a failed initial install */
+    private function purgeRepositoryDirIfNew()
+    {
+        if (! $this->currentVersion()) {
+            $filesystem = new Filesystem;
+            $filesystem->remove($this->repositoryDir);
         }
     }
 }

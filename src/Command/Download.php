@@ -107,7 +107,7 @@ class Download extends Command
 
         $dirName = $this->repository === self::DEFAULT_REPOSITORY
             ? self::DEFAULT_REPOSITORY_DIR
-            : $this->repository;
+            : str_replace(['/', '\\'], '-', $this->repository);
 
         $this->repositoryDir = Path::join($baseDir, 'binaries', $dirName);
         $this->currentVersion = $this->assetManager()->currentVersion();
