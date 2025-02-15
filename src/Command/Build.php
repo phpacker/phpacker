@@ -2,6 +2,7 @@
 
 namespace PHPacker\PHPacker\Command;
 
+use PHPacker\PHPacker\Support\Combine;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -9,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use PHPacker\PHPacker\Command\Concerns\WithIniOptions;
+use PHPacker\PHPacker\Exceptions\CombineErrorException;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use PHPacker\PHPacker\Command\Concerns\WithBuildArguments;
 
@@ -45,7 +47,7 @@ class Build extends Command
             $this->build($input, $output);
 
             return Command::SUCCESS;
-        } catch (CommandErrorException $e) {
+        } catch (CommandErrorException|CombineErrorException $e) {
             error($e->getMessage());
 
             return Command::FAILURE;
@@ -66,6 +68,10 @@ class Build extends Command
                 info("Building for {$platform}-{$arch}");
 
                 // TODO: Combine self-executable with script
+                $config = [];
+
+                // stub - build config manager first
+                Combine::build($config);
             }
         }
     }
