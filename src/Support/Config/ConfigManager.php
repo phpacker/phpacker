@@ -2,14 +2,37 @@
 
 namespace PHPacker\PHPacker\Support\Config;
 
+use BadMethodCallException;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConfigManager
 {
+    protected static ConfigRepository $repository;
+
     const INTERNAL_CONFIG = __DIR__ . '/../../../config/phpacker.json';
 
-    protected static ConfigRepository $repository;
+    const PROXY_METHODS = [
+        'get',
+        'set',
+        'all',
+        'merge',
+    ];
+
+    // Proxy methods to the repository object
+    public static function __callStatic($method, $arguments)
+    {
+        if (in_array($method, self::PROXY_METHODS)) {
+            return self::$repository->$method(...$arguments);
+        }
+
+        throw new BadMethodCallException("Method {$method} does not exist.");
+    }
+
+    public static function getRepository(): ConfigRepository
+    {
+        return self::$repository;
+    }
 
     public static function bootstrap(EventDispatcherInterface $dispatcher)
     {
@@ -18,22 +41,27 @@ class ConfigManager
             self::readFile(self::INTERNAL_CONFIG)
         );
 
-        // Make sure console input is always merged
+        // Dynamically merge config based on command input
         $dispatcher->addListener('console.command', function ($event) {
-            $arguments = $event->getInput()->getArguments();
-            $options = $event->getInput()->getOptions();
 
-            // TODO: merge config file found at src-root (or --config option if present)
-            $inputAsArray = array_filter(array_merge($arguments, $options));
+            // If a --config option was given, use that file
+            // If none was found and.. a --src option was given, search for a phpacker.json and merge
 
-            print_r($inputAsArray);
+            // If a --ini option was given, use that file (only if input is string)
+            // If none was found and.. a --src option was given, search for a phpacker.ini and merge
 
-            // Merge all args & options
-            self::$repository->merge($inputAsArray);
+            // NOTE: all other arguments and options need to be manually set from the command input
+
+            // self::$repository->merge($inputAsArray);
         });
     }
 
-    public static function readFile($path): array
+    /*
+    |--------------------------------------------------------------------------
+    | Support
+    |--------------------------------------------------------------------------
+    */
+    private static function readFile($path): array
     {
         if (! file_exists($path)) {
             throw new CommandErrorException("File not found: {$path}");
