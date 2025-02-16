@@ -38,7 +38,9 @@ class Build extends Command
         $this
             ->addArgument('platform', InputArgument::OPTIONAL, 'Target platform')
             ->addArgument('architectures', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Target architectures')
-            ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default ./phpacker.ini)');
+            ->addOption('src', 's', InputOption::VALUE_REQUIRED, 'Path to the target php or phar file') // TODO: Validate
+            ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to config file (default: {src-dir}/phpacker.json)')
+            ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -67,7 +69,7 @@ class Build extends Command
             foreach ($archs as $arch) {
                 info("Building for {$platform}-{$arch}");
 
-                // TODO: Combine self-executable with script
+                // TODO: Combine self-extracting executable with script
                 $config = [];
 
                 // stub - build config manager first

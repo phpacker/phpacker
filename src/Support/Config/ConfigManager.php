@@ -3,6 +3,8 @@
 namespace PHPacker\PHPacker\Support\Config;
 
 use BadMethodCallException;
+use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -38,21 +40,19 @@ class ConfigManager
     {
         // Init static config repository
         self::$repository = new ConfigRepository(
-            self::readFile(self::INTERNAL_CONFIG)
+            self::readJsonFile(self::INTERNAL_CONFIG)
         );
 
         // Dynamically merge config based on command input
         $dispatcher->addListener('console.command', function ($event) {
+            $input = $event->getInput();
 
-            // If a --config option was given, use that file
-            // If none was found and.. a --src option was given, search for a phpacker.json and merge
+            self::$repository->merge(
+                self::configFromCommand($input)
+            );
 
-            // If a --ini option was given, use that file (only if input is string)
-            // If none was found and.. a --src option was given, search for a phpacker.ini and merge
-
-            // NOTE: all other arguments and options need to be manually set from the command input
-
-            // self::$repository->merge($inputAsArray);
+            // IMPORTANT
+            // All other arguments and options need to be manually set from the command input
         });
     }
 
@@ -61,10 +61,14 @@ class ConfigManager
     | Support
     |--------------------------------------------------------------------------
     */
-    private static function readFile($path): array
+    private static function readJsonFile($path): array
     {
         if (! file_exists($path)) {
             throw new CommandErrorException("File not found: {$path}");
+        }
+
+        if (pathinfo($path, PATHINFO_EXTENSION) !== 'json') {
+            throw new CommandErrorException("Invalid file type: {$path}. Expected a JSON file.");
         }
 
         $jsonData = file_get_contents($path);
@@ -78,5 +82,35 @@ class ConfigManager
         }
 
         return $data;
+    }
+
+    /*
+     * When a --config option was given, use it
+     * Otherwise scan the src argument directory
+     */
+    private static function configFromCommand(InputInterface $input): array
+    {
+
+        // If a --config option was given
+        $configPath = $input->getOption('config');
+
+        if (is_string($configPath)) {
+            return self::readJsonFile($configPath);
+        }
+
+        // If a --src option was given scan the src dir
+        $sourceFile = $input->getOption('src');
+
+        if (is_string($sourceFile)) {
+            // Determine the folder of $sourcePath
+            $sourceDir = dirname($sourceFile);
+            $projectConfig = Path::join($sourceDir, 'phpacker.json');
+
+            if (file_exists($projectConfig)) {
+                return self::readJsonFile($projectConfig);
+            }
+        }
+
+        return [];
     }
 }
