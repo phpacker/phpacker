@@ -60,6 +60,8 @@ class Build extends Command
     {
         $targets = $this->handleInput($input, self::PLATFORMS);
 
+        $input->validate();
+
         $this->validateSrcPath($input);
 
         if ($ini = $this->promptIniInput($input)) {

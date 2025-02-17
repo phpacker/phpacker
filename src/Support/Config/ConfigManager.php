@@ -57,16 +57,22 @@ class ConfigManager
         $dispatcher->addListener('console.command', function ($event) {
             $input = $event->getInput();
 
+            // Merge all command input into the config
+            self::$repository->merge([
+                ...$input->getArguments(),
+                ...$input->getOptions(),
+            ]);
+
+            // Override with discovered or given config file
             self::$repository->merge(
                 self::configFromCommand($input)
             );
 
+            // Override with discovered or given config file
             self::$repository->merge([
                 'ini' => self::iniFromCommand($input),
             ]);
 
-            // IMPORTANT
-            // All other arguments and options need to be manually set from the command input
         });
     }
 
