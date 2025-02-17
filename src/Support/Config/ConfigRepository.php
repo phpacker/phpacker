@@ -13,6 +13,11 @@ class ConfigRepository
         return $this->data[$key] ?? null;
     }
 
+    public function set(string $key, mixed $value): mixed
+    {
+        return $this->data[$key] = $value;
+    }
+
     public function all(): object
     {
         return (object) $this->data;
