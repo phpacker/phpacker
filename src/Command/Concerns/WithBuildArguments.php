@@ -2,10 +2,12 @@
 
 namespace PHPacker\PHPacker\Command\Concerns;
 
+use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\textarea;
 use function Laravel\Prompts\multiselect;
 
 /**
@@ -51,5 +53,30 @@ trait WithBuildArguments
         }
 
         return [$platform => $architectures];
+    }
+
+    /*
+     * All options will be automatically merged with the config
+     * Only when a --ini flag was given without a value
+     * we prompt with a textarea input
+     */
+    protected function promptIniInput(InputInterface $input)
+    {
+        // Already handled by ConfigManager bootstrap
+        if ($input->getOption('ini') !== null) {
+            return ConfigManager::get('ini');
+        }
+
+        $raw = textarea(
+            'ini settings',
+            required: true
+        );
+
+        $ini = parse_ini_string($raw, scanner_mode: INI_SCANNER_RAW);
+        if ($ini === false) {
+            throw new CommandErrorException('Invalid ini input. Please check for syntax errors');
+        }
+
+        return $ini;
     }
 }
