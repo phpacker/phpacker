@@ -11,11 +11,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use function Laravel\Prompts\info;
 
 /**
- * Class ConfigManager
- *
+ * @method static object all()
  * @method static mixed get(string $key)
  * @method static mixed set(string $key, mixed $value)
- * @method static object all()
  * @method static object merge(array $data)
  */
 class ConfigManager
