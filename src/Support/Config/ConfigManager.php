@@ -8,6 +8,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class ConfigManager
+ *
+ * @method static mixed get(string $key): mixed
+ * @method static object all(): array
+ * @method static object merge(array $data)
+ */
 class ConfigManager
 {
     protected static ConfigRepository $repository;
@@ -40,7 +47,7 @@ class ConfigManager
     {
         // Init static config repository
         self::$repository = new ConfigRepository(
-            self::readJsonFile(self::INTERNAL_CONFIG)
+            self::readJsonFile(self::INTERNAL_CONFIG),
         );
 
         // Dynamically merge config based on command input
@@ -50,6 +57,10 @@ class ConfigManager
             self::$repository->merge(
                 self::configFromCommand($input)
             );
+
+            self::$repository->merge([
+                'ini' => self::iniFromCommand($input),
+            ]);
 
             // IMPORTANT
             // All other arguments and options need to be manually set from the command input
@@ -84,12 +95,38 @@ class ConfigManager
         return $data;
     }
 
+    private static function readIniFile($path): array
+    {
+        if (! file_exists($path)) {
+            throw new CommandErrorException("File not found: {$path}");
+        }
+
+        if (pathinfo($path, PATHINFO_EXTENSION) !== 'ini') {
+            throw new CommandErrorException("Invalid file type: {$path}. Expected a INI file.");
+        }
+
+        $ini = parse_ini_string(file_get_contents($path), scanner_mode: INI_SCANNER_RAW);
+        if ($ini === false) {
+            throw new CommandErrorException('Invalid ini input. Please check for syntax errors');
+        }
+
+        if (empty($ini)) {
+            throw new CommandErrorException("No INI definitions found in {$path}");
+        }
+
+        return $ini;
+    }
+
     /*
      * When a --config option was given, use it
      * Otherwise scan the src argument directory
      */
     private static function configFromCommand(InputInterface $input): array
     {
+        // No --config configured in command
+        if (! $input->hasOption('config')) {
+            return [];
+        }
 
         // If a --config option was given
         $configPath = $input->getOption('config');
@@ -108,6 +145,40 @@ class ConfigManager
 
             if (file_exists($projectConfig)) {
                 return self::readJsonFile($projectConfig);
+            }
+        }
+
+        return [];
+    }
+
+    /*
+     * When a --ini option was given, use it
+     * Otherwise scan the src argument directory
+     */
+    private static function iniFromCommand(InputInterface $input): array
+    {
+        // No --ini configured in command
+        if (! $input->hasOption('ini')) {
+            return [];
+        }
+
+        // If a --ini option was given
+        $iniPath = $input->getOption('ini');
+
+        if (is_string($iniPath)) {
+            return self::readIniFile($iniPath);
+        }
+
+        // If a --src option was given scan the src dir
+        $sourceFile = $input->getOption('src');
+
+        if (is_string($sourceFile)) {
+            // Determine the folder of $sourcePath
+            $sourceDir = dirname($sourceFile);
+            $projectIni = Path::join($sourceDir, 'phpacker.ini');
+
+            if (file_exists($projectIni)) {
+                return self::readIniFile($projectIni);
             }
         }
 
