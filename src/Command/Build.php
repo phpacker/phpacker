@@ -5,6 +5,7 @@ namespace PHPacker\PHPacker\Command;
 use PHPacker\PHPacker\Support\Combine;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -46,6 +47,16 @@ class Build extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
+            // Fetch latest binaries
+            $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
+                'command' => 'download',
+                'repository' => ConfigManager::get('bin'),
+            ]), $output);
+
+            if ($downloadExitCode === Command::FAILURE) {
+                return Command::FAILURE;
+            }
+
             $this->build($input, $output);
 
             return Command::SUCCESS;

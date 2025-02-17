@@ -62,7 +62,7 @@ class Download extends Command
         }
 
         if ($this->currentVersion === $this->latestVersion) {
-            info('You already have the latest version.');
+            info("You're using the latest version: {$this->repository}:{$this->latestVersion}");
 
             return;
         }
