@@ -8,6 +8,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use function Laravel\Prompts\info;
+
 /**
  * Class ConfigManager
  *
@@ -132,6 +134,8 @@ class ConfigManager
         $configPath = $input->getOption('config');
 
         if (is_string($configPath)) {
+            info("Using config file at '{$configPath}'");
+
             return self::readJsonFile($configPath);
         }
 
@@ -144,6 +148,8 @@ class ConfigManager
             $projectConfig = Path::join($sourceDir, 'phpacker.json');
 
             if (file_exists($projectConfig)) {
+                info("Using config file at '{$projectConfig}'");
+
                 return self::readJsonFile($projectConfig);
             }
         }
@@ -166,6 +172,8 @@ class ConfigManager
         $iniPath = $input->getOption('ini');
 
         if (is_string($iniPath)) {
+            info("Using ini file at '{$iniPath}'");
+
             return self::readIniFile($iniPath);
         }
 
@@ -178,6 +186,8 @@ class ConfigManager
             $projectIni = Path::join($sourceDir, 'phpacker.ini');
 
             if (file_exists($projectIni)) {
+                info("Using ini file at '{$projectIni}'");
+
                 return self::readIniFile($projectIni);
             }
         }
