@@ -1,7 +1,7 @@
 {
     "platform": "all",
     "architectures": [],
-    "bin": "phpacker/php-bin",
+    "bin": "default",
     "force": false,
     "ini": false
 }
