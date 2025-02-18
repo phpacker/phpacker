@@ -22,10 +22,10 @@ class GitHub implements RemoteRepositoryService
                 ],
             ];
             $context = stream_context_create($options);
-            $response = file_get_contents($url, false, $context);
+            $response = @file_get_contents($url, false, $context);
 
             if ($response === false) {
-                return null;
+                throw new RepositoryRequestException("Failed to fetch release data for: {$this->repository}");
             }
 
             return json_decode($response, true);
@@ -73,7 +73,7 @@ class GitHub implements RemoteRepositoryService
 
     public function latestVersion(): ?string
     {
-        $response = @$this->releaseData();
+        $response = $this->releaseData();
 
         return $response['tag_name'] ?? null;
     }
