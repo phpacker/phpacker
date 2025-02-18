@@ -60,7 +60,12 @@ class AssetManager
             // Extract them all
             foreach ($files as $zip) {
                 $realPath = $zip->getRealPath();
-                $destPath = Path::join($this->repositoryDir, substr($realPath, strrpos($realPath, 'bin') + 4));
+
+                // Work out the unpack destination
+                $destPath = substr($realPath, strrpos($realPath, 'bin') + 4);
+                $destPath = Path::join($this->repositoryDir, $destPath);
+                $destPath = preg_replace('/php-(\d+\.\d+)\.zip$/', '$1', $destPath);
+
                 $this->unzip($realPath, $destPath);
             }
 
@@ -77,8 +82,7 @@ class AssetManager
     public function prepareDirectory()
     {
         if (! is_dir($this->repositoryDir)) {
-            print_r($this->repositoryDir);
-            mkdir($this->repositoryDir);
+            mkdir($this->repositoryDir, 0755, recursive: true);
         }
     }
 

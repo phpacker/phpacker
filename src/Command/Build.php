@@ -50,7 +50,7 @@ class Build extends Command
             // Fetch latest binaries
             $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
                 'command' => 'download',
-                'repository' => ConfigManager::get('bin'),
+                'repository' => ConfigManager::get('repository'),
             ]), $output);
 
             if ($downloadExitCode === Command::FAILURE) {

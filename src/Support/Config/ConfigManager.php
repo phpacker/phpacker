@@ -57,11 +57,10 @@ class ConfigManager
         $dispatcher->addListener('console.command', function ($event) {
             $input = $event->getInput();
 
-            // Merge all command input into the config
-            self::$repository->merge([
-                ...$input->getArguments(),
-                ...$input->getOptions(),
-            ]);
+            // Merge all command arguments into the config
+            self::$repository->merge(
+                $input->getArguments(),
+            );
 
             // Override with discovered or given config file
             self::$repository->merge(
@@ -115,6 +114,8 @@ class ConfigManager
 
                 return self::readJsonFile($projectConfig);
             }
+
+            self::$repository->set('src', $sourceFile);
         }
 
         return [];

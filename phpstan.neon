@@ -4,6 +4,9 @@ parameters:
         - src/
         - bin/
 
+    dynamicConstantNames:
+		- APP_DATA
+
     excludePaths:
 
     # Level 9 is the highest level

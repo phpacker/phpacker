@@ -45,6 +45,8 @@ class Download extends Command
 
     protected function download(InputInterface $input)
     {
+        // TODO: Handle internet connection
+
         if (! $this->latestVersion) {
             throw new CommandErrorException("No version tagged for '{$this->repository}'");
         }
@@ -96,20 +98,13 @@ class Download extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        // Store in OS-specific app data directory
-        $baseDir = match (PHP_OS_FAMILY) {
-            'Darwin' => Path::join(getenv('HOME'), '.phpacker'),
-            'Windows' => Path::join(getenv('LOCALAPPDATA'), 'phpacker'),
-            default => Path::join(getenv('XDG_DATA_HOME') ?: Path::join(getenv('HOME'), '.phpacker'))
-        };
-
         $this->repository = $input->getArgument('repository');
 
         $dirName = $this->repository === self::DEFAULT_REPOSITORY
             ? self::DEFAULT_REPOSITORY_DIR
             : str_replace(['/', '\\'], '-', $this->repository);
 
-        $this->repositoryDir = Path::join($baseDir, 'binaries', $dirName);
+        $this->repositoryDir = Path::join(APP_DATA, 'binaries', $dirName);
         $this->currentVersion = $this->assetManager()->currentVersion();
         $this->latestVersion = $this->repository()->latestVersion();
     }
