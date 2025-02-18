@@ -1,7 +1,8 @@
 {
     "platform": "all",
     "architectures": [],
-    "bin": "phpacker/php-bin",
+    "repository": "phpacker/php-bin",
     "force": false,
-    "ini": false
+    "ini": false,
+    "php": 8.4
 }
