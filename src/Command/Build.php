@@ -4,6 +4,7 @@ namespace PHPacker\PHPacker\Command;
 
 use PHPacker\PHPacker\Support\Combine;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Console\Terminal;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,7 +42,8 @@ class Build extends Command
             ->addArgument('architectures', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Target architectures')
             ->addOption('src', 's', InputOption::VALUE_REQUIRED, 'Path to the target php or phar file') // TODO: Validate
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to config file (default: {src-dir}/phpacker.json)')
-            ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)', false);
+            ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)', false)
+            ->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force fetch a fresh copy of the binaries', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -51,6 +53,7 @@ class Build extends Command
             $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
                 'command' => 'download',
                 'repository' => ConfigManager::get('repository'),
+                $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
             ]), $output);
 
             if ($downloadExitCode === Command::FAILURE) {
@@ -85,10 +88,12 @@ class Build extends Command
 
         foreach ($targets as $platform => $archs) {
             foreach ($archs as $arch) {
-
                 Combine::build($platform, $arch, ConfigManager::getRepository());
+                $this->printDots("{$platform} - {$arch}", 60, $output);
             }
         }
+
+        $output->write(PHP_EOL);
     }
 
     private function printIniTable(array $ini)
@@ -98,6 +103,17 @@ class Build extends Command
         }, $ini, array_keys($ini));
 
         table(['  directive  ', '    value    '], $rows);
+    }
+
+    private function printDots(string $text, int $maxLength, OutputInterface $output)
+    {
+        $terminalWidth = (new Terminal)->getWidth();
+        $maxLength = min($maxLength - 2, $terminalWidth - 8);
+
+        $dots = str_repeat('·', 60);
+        $dots = str_repeat('·', $maxLength - strlen($text));
+
+        $output->writeln("  <options=bold>{$text}</> <fg=gray>{$dots}</> ✅");
     }
 
     private function validateSrcPath(InputInterface $input)
