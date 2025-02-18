@@ -42,7 +42,7 @@ class Combine
 
         // Combine the files
         $srcPath = Path::join(getcwd(), $config->get('src'));
-        if (! file_exists($binPath)) {
+        if (! file_exists($binPath)) { // @phpstan-ignore booleanNot.alwaysFalse (phpstan is wrong)
             throw new CommandErrorException("Source at {$srcPath} does not exit");
         }
 
