@@ -7,9 +7,6 @@ use PHPacker\PHPacker\Command\Download;
 use PHPacker\PHPacker\Support\Config\ConfigRepository;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 
-use function Laravel\Prompts\info;
-use function Laravel\Prompts\note;
-
 class Combine
 {
     const PLATFORM_MAP = [
@@ -25,8 +22,6 @@ class Combine
 
     public static function build(string $platform, string $arch, ConfigRepository $config)
     {
-        info("Building for {$platform}-{$arch}");
-
         $phpVersion = $config->get('php');
         $repository = $config->get('repository');
 
@@ -58,9 +53,12 @@ class Combine
             $outputPath .= '.exe';
         }
 
-        @mkdir(dirname($outputPath), 0755, recursive: true); //
+        // Make sure output path & file exist
+        @mkdir(dirname($outputPath), 0755, recursive: true);
         touch($outputPath);
+        chmod($outputPath, 0755); // chmod +x
 
+        // Combine all data in the output path
         $combined = file_get_contents($binPath) . $iniPart . file_get_contents($srcPath);
         $result = file_put_contents($outputPath, $combined);
 
@@ -68,9 +66,6 @@ class Combine
             throw new CommandErrorException('Build failed');
         }
 
-        // chmod +x
-        chmod($outputPath, 0755);
-
-        note($outputPath);
+        return true;
     }
 }
