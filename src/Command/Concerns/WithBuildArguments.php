@@ -20,8 +20,8 @@ trait WithBuildArguments
     */
     protected function handleInput(InputInterface $input, array $platforms): array
     {
-        // Get platform (from argument or prompt)
-        $platform = $input->getArgument('platform') ?: select(
+        // Get platform (from config, argument or prompt)
+        $platform = ConfigManager::get('platform') ?? $input->getArgument('platform') ?: select(
             'Select platform',
             ['mac' => 'Mac', 'linux' => 'Linux', 'windows' => 'Windows', 'all' => 'all']
         );
@@ -37,9 +37,9 @@ trait WithBuildArguments
             throw new CommandErrorException("Invalid platform '{$platform}'. Options are: " . implode(', ', $availablePlatforms));
         }
 
-        // Get architectures (from arguments or prompt)
+        // Get architectures (from config, arguments or prompt)
         $validArchitectures = $platforms[$platform];
-        $architectures = $input->getArgument('architectures') ?: multiselect(
+        $architectures = ConfigManager::get('architectures') ?? $input->getArgument('architectures') ?: multiselect(
             "Select architectures for {$platform}",
             $validArchitectures,
             required: true
