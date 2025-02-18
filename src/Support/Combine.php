@@ -49,7 +49,7 @@ class Combine
         $outputPath = Path::join(dirname($srcPath), 'build', $platform, "{$platform}-{$arch}"); // TODO: Make build path configurable
         $iniPart = ''; // TODO Inject INI
 
-        if (PHP_OS_FAMILY === 'Windows') {
+        if ($platform === 'windows') {
             $outputPath .= '.exe';
         }
 
