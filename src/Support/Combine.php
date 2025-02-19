@@ -24,6 +24,7 @@ class Combine
     {
         $phpVersion = $config->get('php');
         $repository = $config->get('repository');
+        $buildDirectory = $config->get('dest');
 
         $repositoryDir = $repository === Download::DEFAULT_REPOSITORY
             ? Download::DEFAULT_REPOSITORY_DIR
@@ -40,13 +41,15 @@ class Combine
             throw new CommandErrorException("PHP binary {$binPath} does not exit");
         }
 
+        // exit(print_r($config->all()));
+
         // Combine the files
         $srcPath = Path::join(getcwd(), $config->get('src'));
         if (! file_exists($binPath)) { // @phpstan-ignore booleanNot.alwaysFalse (phpstan is wrong)
             throw new CommandErrorException("Source at {$srcPath} does not exit");
         }
 
-        $outputPath = Path::join(dirname($srcPath), 'build', $platform, "{$platform}-{$arch}"); // TODO: Make build path configurable
+        $outputPath = Path::join(dirname($srcPath), $buildDirectory, $platform, "{$platform}-{$arch}"); // TODO: Make build path configurable
         $iniPart = ''; // TODO Inject INI
 
         if ($platform === 'windows') {

@@ -40,7 +40,8 @@ class Build extends Command
         $this
             ->addArgument('platform', InputArgument::OPTIONAL, 'Target platform')
             ->addArgument('architectures', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Target architectures')
-            ->addOption('src', 's', InputOption::VALUE_REQUIRED, 'Path to the target php or phar file') // TODO: Validate
+            ->addOption('src', 's', InputOption::VALUE_REQUIRED, 'Path to the target php or phar file')
+            ->addOption('dest', 'd', InputOption::VALUE_REQUIRED, 'Path to the build directory')
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to config file (default: {src-dir}/phpacker.json)')
             ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)', false)
             ->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force fetch a fresh copy of the binaries', false);
@@ -49,16 +50,16 @@ class Build extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            // Fetch latest binaries
-            $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
-                'command' => 'download',
-                'repository' => ConfigManager::get('repository'),
-                $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
-            ]), $output);
+            // // Fetch latest binaries
+            // $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
+            //     'command' => 'download',
+            //     'repository' => ConfigManager::get('repository'),
+            //     $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
+            // ]), $output);
 
-            if ($downloadExitCode === Command::FAILURE) {
-                return Command::FAILURE;
-            }
+            // if ($downloadExitCode === Command::FAILURE) {
+            //     return Command::FAILURE;
+            // }
 
             $this->build($input, $output);
 
@@ -118,7 +119,7 @@ class Build extends Command
 
     private function validateSrcPath(InputInterface $input)
     {
-        $path = Path::join(getcwd(), $input->getOption('src'));
+        $path = Path::join(getcwd(), ConfigManager::get('src'));
 
         if (! file_exists($path)) {
             throw new CommandErrorException("Source file not found: {$path}");

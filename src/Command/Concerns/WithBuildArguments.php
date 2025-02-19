@@ -20,6 +20,16 @@ trait WithBuildArguments
     */
     protected function handleInput(InputInterface $input, array $platforms): array
     {
+        // Set src & dest relative to cwd when given
+        if ($src = $input->getOption('src')) {
+            ConfigManager::set('src', $src);
+        }
+
+        // Set src & dest relative to cwd when given
+        if ($dest = $input->getOption('dest')) {
+            ConfigManager::set('dest', $dest);
+        }
+
         // Get platform (from config, argument or prompt)
         $platform = ConfigManager::get('platform') ?? $input->getArgument('platform') ?: select(
             'Select platform',

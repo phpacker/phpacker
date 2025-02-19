@@ -57,11 +57,6 @@ class ConfigManager
         $dispatcher->addListener('console.command', function ($event) {
             $input = $event->getInput();
 
-            // Merge all command arguments into the config
-            self::$repository->merge(
-                $input->getArguments(),
-            );
-
             // Override with discovered or given config file
             self::$repository->merge(
                 self::configFromCommand($input)
@@ -72,6 +67,10 @@ class ConfigManager
                 'ini' => self::iniFromCommand($input),
             ]);
 
+            // Merge all command arguments into the config
+            self::$repository->merge(
+                array_filter($input->getArguments()),
+            );
         });
     }
 
@@ -87,8 +86,7 @@ class ConfigManager
      */
     private static function configFromCommand(InputInterface $input): array
     {
-        // No --config configured in command
-        if (! $input->hasOption('config')) {
+        if (! $input->hasOption('config') && ! $input->hasOption('src')) {
             return [];
         }
 
@@ -98,7 +96,10 @@ class ConfigManager
         if (is_string($configPath)) {
             info("Using config file at '{$configPath}'");
 
-            return self::readJsonFile($configPath);
+            return self::convertPaths(
+                self::readJsonFile($configPath),
+                dirname($configPath)
+            );
         }
 
         // If a --src option was given scan the src dir
@@ -112,10 +113,11 @@ class ConfigManager
             if (file_exists($projectConfig)) {
                 info("Using config file at '{$projectConfig}'");
 
-                return self::readJsonFile($projectConfig);
+                return self::convertPaths(
+                    self::readJsonFile($projectConfig),
+                    dirname($projectConfig)
+                );
             }
-
-            self::$repository->set('src', $sourceFile);
         }
 
         return [];
@@ -157,5 +159,21 @@ class ConfigManager
         }
 
         return [];
+    }
+
+    private static function convertPaths(array $config, $basePath): array
+    {
+        $convert = [
+            'src',
+            'dest',
+        ];
+
+        foreach ($convert as $key) {
+            if (isset($config[$key]) && is_string($config[$key])) {
+                $config[$key] = Path::join($basePath, $config[$key]);
+            }
+        }
+
+        return $config;
     }
 }
