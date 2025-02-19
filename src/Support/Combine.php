@@ -49,7 +49,7 @@ class Combine
             throw new CommandErrorException("Source at {$srcPath} does not exit");
         }
 
-        $outputPath = Path::join(dirname($srcPath), $buildDirectory, $platform, "{$platform}-{$arch}"); // TODO: Make build path configurable
+        $outputPath = Path::join($buildDirectory, $platform, "{$platform}-{$arch}");
         $iniPart = ''; // TODO Inject INI
 
         if ($platform === 'windows') {

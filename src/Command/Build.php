@@ -3,7 +3,6 @@
 namespace PHPacker\PHPacker\Command;
 
 use PHPacker\PHPacker\Support\Combine;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -50,16 +49,16 @@ class Build extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            // // Fetch latest binaries
-            // $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
-            //     'command' => 'download',
-            //     'repository' => ConfigManager::get('repository'),
-            //     $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
-            // ]), $output);
+            // Fetch latest binaries
+            $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
+                'command' => 'download',
+                'repository' => ConfigManager::get('repository'),
+                $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
+            ]), $output);
 
-            // if ($downloadExitCode === Command::FAILURE) {
-            //     return Command::FAILURE;
-            // }
+            if ($downloadExitCode === Command::FAILURE) {
+                return Command::FAILURE;
+            }
 
             $this->build($input, $output);
 
@@ -77,18 +76,15 @@ class Build extends Command
 
         $input->validate();
 
-        $this->validateSrcPath($input);
+        $this->validateSrcPath();
 
-        if ($ini = $this->promptIniInput($input)) {
-            ConfigManager::set('ini', $ini);
-        }
-
-        if ($ini) {
+        if ($ini = ConfigManager::get('ini')) {
             $this->printIniTable($ini);
         }
 
         foreach ($targets as $platform => $archs) {
             foreach ($archs as $arch) {
+                // TODO: Extract Combine args to DTO? The config is dynamic and can
                 Combine::build($platform, $arch, ConfigManager::getRepository());
                 $this->printDots("{$platform} - {$arch}", 60, $output);
             }
@@ -115,19 +111,5 @@ class Build extends Command
         $dots = str_repeat('·', $maxLength - strlen($text));
 
         $output->writeln("  <options=bold>{$text}</> <fg=gray>{$dots}</> ✅");
-    }
-
-    private function validateSrcPath(InputInterface $input)
-    {
-        $path = Path::join(getcwd(), ConfigManager::get('src'));
-
-        if (! file_exists($path)) {
-            throw new CommandErrorException("Source file not found: {$path}");
-        }
-
-        $ext = pathinfo($path, PATHINFO_EXTENSION);
-        if (! in_array($ext, ['php', 'phar'])) {
-            throw new CommandErrorException("Invalid file type: {$path}. Expected a PHP or PHAR file.");
-        }
     }
 }
