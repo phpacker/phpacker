@@ -1,4 +1,5 @@
 {
+    "dest": "build",
     "repository": "phpacker/php-bin",
     "force": false,
     "ini": false,

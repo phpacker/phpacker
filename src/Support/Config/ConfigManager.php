@@ -110,6 +110,7 @@ class ConfigManager
             $sourceDir = dirname($sourceFile);
             $projectConfig = Path::join($sourceDir, 'phpacker.json');
 
+            // Use project config paths relative to itself
             if (file_exists($projectConfig)) {
                 info("Using config file at '{$projectConfig}'");
 
@@ -118,6 +119,12 @@ class ConfigManager
                     dirname($projectConfig)
                 );
             }
+
+            // Use default config paths relative to --src
+            return self::convertPaths(
+                self::readJsonFile(self::INTERNAL_CONFIG),
+                $sourceDir
+            );
         }
 
         return [];
@@ -170,7 +177,7 @@ class ConfigManager
 
         foreach ($convert as $key) {
             if (isset($config[$key]) && is_string($config[$key])) {
-                $config[$key] = Path::join($basePath, $config[$key]);
+                $config[$key] = Path::makeAbsolute($config[$key], realpath($basePath));
             }
         }
 

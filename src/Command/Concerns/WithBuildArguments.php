@@ -20,14 +20,19 @@ trait WithBuildArguments
     */
     protected function handleInput(InputInterface $input, array $platforms): array
     {
-        // Set src & dest relative to cwd when given
+        // Set src relative to cwd when given
         if ($src = $input->getOption('src')) {
             ConfigManager::set('src', $src);
         }
 
-        // Set src & dest relative to cwd when given
+        // Set dest relative to cwd when given
         if ($dest = $input->getOption('dest')) {
             ConfigManager::set('dest', $dest);
+        }
+
+        // Prompt for INI if needed
+        if ($ini = $this->promptIniInput($input)) {
+            ConfigManager::set('ini', $ini);
         }
 
         // Get platform (from config, argument or prompt)
@@ -88,5 +93,19 @@ trait WithBuildArguments
         }
 
         return $ini;
+    }
+
+    private function validateSrcPath()
+    {
+        $path = ConfigManager::get('src');
+
+        if (! file_exists($path)) {
+            throw new CommandErrorException("Source file not found: {$path}");
+        }
+
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        if (! in_array($ext, ['php', 'phar'])) {
+            throw new CommandErrorException("Invalid file type: {$path}. Expected a PHP or PHAR file.");
+        }
     }
 }
