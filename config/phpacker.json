@@ -1,6 +1,4 @@
 {
-    "platform": "all",
-    "architectures": [],
     "repository": "phpacker/php-bin",
     "force": false,
     "ini": false,
