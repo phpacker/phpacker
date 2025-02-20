@@ -5,8 +5,6 @@
 
 PHPacker enables you to package any PHP script or PHAR into a standalone, cross-platform executable. It handles all the complexity of bundling PHP runtime with your application, making distribution simple and hassle-free.
 
-## Geting Started
-
 ## Installation
 
 You can install PHPacker globally via Composer:
