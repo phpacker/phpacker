@@ -82,18 +82,19 @@ Place a `phpacker.json` file in your project root to define build settings:
 
 PHPacker will look for a config file in the following order:
 
-1. Custom path specified via `--ini=path/to/file.json`
-2. `phpacker.json` in the source directory
+1. Custom path specified via `--config=path/to/file.json`
+2. `phpacker.json` in the source directory via `--src` option
 3. `phpacker.json` in the current working directory
 
 #### PHP INI Configuration
 
-PHPacker will look for configuration in the following order:
+Similarly PHPacker will look for ini configuration in the following order:
 
 1. Custom path specified via `--ini=path/to/file.ini`
-2. `phpacker.ini` in the source directory
-3. `phpacker.ini` in the current working directory
-4. Interactive prompt if `--ini` is passed without a value
+2. Path specified in discovered config file
+3. `phpacker.ini` in the source directory via `--src` option
+4. `phpacker.ini` in the current working directory
+5. Interactive prompt if `--ini` is passed without a value
 
 ### Custom PHP Builds
 
