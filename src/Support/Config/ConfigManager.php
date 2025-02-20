@@ -163,7 +163,6 @@ class ConfigManager
      */
     private static function iniFromCommand(InputInterface $input): array
     {
-
         // 1. Custom path specified via `--ini=path/to/file.ini`
         $iniPath = $input->hasOption('ini')
             ? $input->getOption('ini')
