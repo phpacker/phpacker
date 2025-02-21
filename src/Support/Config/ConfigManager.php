@@ -147,7 +147,7 @@ class ConfigManager
 
             $config = array_merge($internalConfig, self::readJsonFile($configPath));
 
-            return self::convertPaths($config, getcwd());
+            return self::convertPaths($config, './');
         }
 
         return $internalConfig;
@@ -226,6 +226,8 @@ class ConfigManager
                 $config[$key] = Path::makeAbsolute($config[$key], realpath($basePath));
             }
         }
+
+        print_r($config) . PHP_EOL;
 
         return $config;
     }

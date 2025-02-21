@@ -44,7 +44,7 @@ class Combine
         // exit(print_r($config->all()));
 
         // Combine the files
-        $srcPath = Path::join(getcwd(), $config->get('src'));
+        $srcPath = Path::join($config->get('src'));
         if (! file_exists($srcPath)) {
             throw new CommandErrorException("Source at {$srcPath} does not exit");
         }
