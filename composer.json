@@ -6,7 +6,8 @@
     "autoload": {
         "files": ["src/constants.php"],
         "psr-4": {
-            "PHPacker\\PHPacker\\": "src/"
+            "PHPacker\\PHPacker\\": "src/",
+            "Tests\\": "tests/"
         }
     },
     "authors": [
@@ -42,11 +43,19 @@
     },
     "require-dev": {
         "laravel/pint": "^1.20",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "pestphp/pest": "^3.7",
+        "symfony/process": "^7.2"
     },
     "scripts": {
+        "test": "./vendor/bin/pest",
         "format": "./vendor/bin/pint",
         "analyze": "./vendor/bin/phpstan"
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }

@@ -4,6 +4,7 @@ namespace PHPacker\PHPacker\Support;
 
 use Symfony\Component\Filesystem\Path;
 use PHPacker\PHPacker\Command\Download;
+use Symfony\Component\Filesystem\Filesystem;
 use PHPacker\PHPacker\Support\Config\ConfigRepository;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 
@@ -41,7 +42,7 @@ class Combine
             throw new CommandErrorException("PHP binary {$binPath} does not exit");
         }
 
-        // exit(print_r($config->all()));
+        // print_r($config->all());
 
         // Combine the files
         $srcPath = Path::join($config->get('src'));
@@ -57,7 +58,8 @@ class Combine
         }
 
         // Make sure output path & file exist
-        @mkdir(dirname($outputPath), 0755, recursive: true);
+        $filesystem = new Filesystem;
+        $filesystem->mkdir(dirname($outputPath), 0755);
         touch($outputPath);
         chmod($outputPath, 0755); // chmod +x
 
