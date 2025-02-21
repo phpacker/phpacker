@@ -60,25 +60,6 @@ phpacker build --src=./app.phar --php=8.3
 | Linux    | arm64, x64    | 8.2, 8.3, 8.4 |
 | Windows  | x64           | 8.2, 8.3, 8.4 |
 
-```php
-use Symfony\Component\Filesystem\Path;
-
-$appName = 'my-app';
-
-// Define APP_DATA constant
-define('APP_DATA', match (PHP_OS_FAMILY) {
-    'Darwin' => Path::join(getenv('HOME'), 'Library', 'Application', 'Support', $appName),
-    'Windows' => Path::join(getenv('LOCALAPPDATA'), $appName),
-    default => Path::join(getenv('HOME'), $appName))
-});
-```
-
-This ensures your application's data is stored in the appropriate location across different operating systems:
-
-- macOS: `~/Library/Application Support/.my-app`
-- Windows: `%LOCALAPPDATA%\my-app`
-- Linux: `~/.my-app`
-
 ### Configuration
 
 Using a config file you are able to predefine any argument or option otherwise passed to the build command. This way you can have all parameters for your project in a single version tracked file.
@@ -131,6 +112,25 @@ If you're building from a single PHP script, all code must be contained within t
 ### File System Access
 
 When your application is packaged (either from a single script or PHAR), it cannot write files within the application itself since everything is combined into a single executable. Instead, use the platform-specific application data directory for file storage. Here's a helper script to determine the correct path:
+
+```php
+use Symfony\Component\Filesystem\Path;
+
+$appName = 'my-app';
+
+// Define APP_DATA constant
+define('APP_DATA', match (PHP_OS_FAMILY) {
+    'Darwin' => Path::join(getenv('HOME'), 'Library', 'Application', 'Support', $appName),
+    'Windows' => Path::join(getenv('LOCALAPPDATA'), $appName),
+    default => Path::join(getenv('HOME'), $appName))
+});
+```
+
+This ensures your application's data is stored in the appropriate location across different operating systems:
+
+- macOS: `~/Library/Application Support/.my-app`
+- Windows: `%LOCALAPPDATA%\my-app`
+- Linux: `~/.my-app`
 
 ## Custom PHP Builds
 
