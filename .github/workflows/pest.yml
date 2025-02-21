@@ -14,5 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: php-actions/composer@v6
+      - name: Set directory permissions
+        run: sudo chmod -R 777 vendor/composer
       - name: Run Pest tests
         run: ./vendor/bin/pest
