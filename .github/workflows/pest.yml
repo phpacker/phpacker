@@ -1,11 +1,11 @@
-name: analyze
+name: tests
 
 on:
   - pull_request
   - workflow_dispatch
 
 jobs:
-  build-test:
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
