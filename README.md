@@ -8,6 +8,8 @@
 
 PHPacker enables you to package any PHP script or PHAR into a standalone, cross-platform executable. It handles all the complexity of bundling PHP runtime with your application, making distribution simple and hassle-free.
 
+<br />
+
 ## Installation
 
 You can install PHPacker globally via Composer:
@@ -57,18 +59,6 @@ phpacker build --src=./app.phar --php=8.3
 | macOS    | arm64, x64    | 8.2, 8.3, 8.4 |
 | Linux    | arm64, x64    | 8.2, 8.3, 8.4 |
 | Windows  | x64           | 8.2, 8.3, 8.4 |
-
-### Prepping your CLI app
-
-When building an executable using PHPacker, there are some important considerations:
-
-#### Single PHP Script Limitations
-
-If you're building from a single PHP script, all code must be contained within that file. External dependencies through `require` or `use` statements are not supported. If your application needs external dependencies, you should first package it as a PHAR archive using a tool like [humbug/box](https://github.com/box-project/box).
-
-#### File System Access
-
-When your application is packaged (either from a single script or PHAR), it cannot write files within the application itself since everything is combined into a single executable. Instead, use the platform-specific application data directory for file storage. Here's a helper script to determine the correct path:
 
 ```php
 use Symfony\Component\Filesystem\Path;
@@ -130,7 +120,19 @@ Similarly PHPacker will look for ini configuration in the following order:
 4. `phpacker.ini` in the current working directory
 5. Interactive prompt if `--ini` is passed without a value
 
-### Custom PHP Builds
+## Prepping your CLI app
+
+When building an executable using PHPacker, there are some important considerations:
+
+### Single PHP Script Limitations
+
+If you're building from a single PHP script, all code must be contained within that file. External dependencies through `require` or `use` statements are not supported. If your application needs external dependencies, you should first package it as a PHAR archive using a tool like [humbug/box](https://github.com/box-project/box).
+
+### File System Access
+
+When your application is packaged (either from a single script or PHAR), it cannot write files within the application itself since everything is combined into a single executable. Instead, use the platform-specific application data directory for file storage. Here's a helper script to determine the correct path:
+
+## Custom PHP Builds
 
 PHPacker supports custom PHP builds with specific extensions through our [php-bin](https://github.com/phpacker/php-bin) repository.
 
@@ -155,7 +157,7 @@ Or from a config file:
 }
 ```
 
-### Updating PHP Binaries
+## Updating PHP Binaries
 
 PHPacker automatically checks for binary updates during builds. Manual updates can be performed:
 
