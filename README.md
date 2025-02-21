@@ -1,5 +1,3 @@
-<h1 style="position: absolute; left: -9999px;">PHPacker</h1>
-
 ![PHPacker](https://github.com/phpacker/phpacker/blob/main/art/readme-logo.jpg?raw=true)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/phpacker/phpacker.svg)](https://packagist.org/packages/phpacker/phpacker)
