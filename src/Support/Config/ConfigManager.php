@@ -227,8 +227,6 @@ class ConfigManager
             }
         }
 
-        print_r($config) . PHP_EOL;
-
         return $config;
     }
 }
