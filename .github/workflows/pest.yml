@@ -1,5 +1,8 @@
 name: tests
 
+permissions:
+  contents: write
+
 on:
   - pull_request
   - workflow_dispatch
