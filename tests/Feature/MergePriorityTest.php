@@ -70,13 +70,103 @@ it('uses config in cwd', function () {
 
 });
 
-it('gives config precedence to --config over --src');
+it('gives config precedence to --config over --src', function () {
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/src/phpacker.json', json_encode([
+        'dest' => 'discovered-via-src-path',
+    ]));
 
-it('gives config precedence to --config over cwd');
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/nested/config.json', json_encode([
+        'dest' => 'foo/discovered-via-config-option',
+    ]));
 
-it('gives config precedence to --src over cwd');
+    commandDouble([
+        '--src' => __DIR__ . '/artifacts/src/app.php',
+        '--config' => __DIR__ . '/artifacts/nested/config.json',
+    ])->exit_code->toBe(Command::SUCCESS);
+    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
 
-it('loads src from config');
+    // The paths will be converted to be relative to the file they came from
+    expect(ConfigManager::all())
+        ->dest->toBe(__DIR__ . '/artifacts/nested/foo/discovered-via-config-option');
+});
+
+it('gives config precedence to --config over cwd', function () {
+
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/cwd/phpacker.json', json_encode([
+        'dest' => 'bar/discovered-in-cwd',
+    ]));
+
+    // Change cwd
+    chdir(__DIR__ . '/artifacts/cwd');
+
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/nested/config.json', json_encode([
+        'dest' => 'foo/discovered-via-config-option',
+    ]));
+
+    commandDouble([
+        '--config' => __DIR__ . '/artifacts/nested/config.json',
+    ])->exit_code->toBe(Command::SUCCESS);
+    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
+
+    // The paths will be converted to be relative to the file they came from
+    expect(ConfigManager::all())
+        ->dest->toBe(__DIR__ . '/artifacts/nested/foo/discovered-via-config-option');
+});
+
+it('gives config precedence to --src over cwd', function () {
+
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/cwd/phpacker.json', json_encode([
+        'dest' => 'bar/discovered-in-cwd',
+    ]));
+
+    // Change cwd
+    chdir(__DIR__ . '/artifacts/cwd');
+
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/phpacker.json', json_encode([
+        'dest' => 'foo/discovered-via-src-path',
+    ]));
+
+    commandDouble([
+        '--src' => __DIR__ . '/artifacts/app.php',
+    ])->exit_code->toBe(Command::SUCCESS);
+    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
+
+    // The paths will be converted to be relative to the file they came from
+    expect(ConfigManager::all())
+        ->dest->toBe(__DIR__ . '/artifacts/foo/discovered-via-src-path');
+});
+
+it('loads src from config', function () {
+
+    // print_r(ConfigManager::all());
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/nested/config.json', json_encode([
+        'src' => './path-to/app.php',
+    ]));
+
+    commandDouble([
+        '--config' => __DIR__ . '/artifacts/nested/config.json',
+    ])->exit_code->toBe(Command::SUCCESS);
+
+    // The paths will be converted to be relative to the file they came from
+    expect(ConfigManager::all())
+        ->src->toBe(__DIR__ . '/artifacts/nested/path-to/app.php');
+});
+
+it('can use paths above config', function () {
+
+    // print_r(ConfigManager::all());
+    $this->filesystem->dumpFile(__DIR__ . '/artifacts/nested/two/config.json', json_encode([
+        'src' => './../../path-to/app.php',
+    ]));
+
+    commandDouble([
+        '--config' => __DIR__ . '/artifacts/nested/two/config.json',
+    ])->exit_code->toBe(Command::SUCCESS);
+
+    // The paths will be converted to be relative to the file they came from
+    expect(ConfigManager::all())
+        ->src->toBe(__DIR__ . '/artifacts/path-to/app.php');
+});
 
 /*
 |--------------------------------------------------------------------------
