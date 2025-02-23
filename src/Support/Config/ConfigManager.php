@@ -84,6 +84,14 @@ class ConfigManager
         });
     }
 
+    public static function reset()
+    {
+        self::$loaded = false;
+        self::$repository = new ConfigRepository(
+            self::readJsonFile(self::INTERNAL_CONFIG),
+        );
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Support
@@ -142,6 +150,8 @@ class ConfigManager
 
         // 3. `phpacker.json` in the current working directory
         $configPath = Path::join(getcwd(), 'phpacker.json');
+
+        print_r($configPath);
 
         if (file_exists($configPath)) {
             info("Using config file at '{$configPath}'");
@@ -224,6 +234,7 @@ class ConfigManager
 
         foreach ($convert as $key) {
             if (isset($config[$key]) && is_string($config[$key])) {
+
                 $config[$key] = Path::makeAbsolute($config[$key], realpath($basePath));
             }
         }
