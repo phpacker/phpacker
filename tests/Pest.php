@@ -1,11 +1,15 @@
 <?php
 
+use Tests\_stubs\CommandDouble;
 use PHPacker\PHPacker\Command\Build;
 use Symfony\Component\Process\Process;
 use PHPacker\PHPacker\Command\Download;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
@@ -51,21 +55,26 @@ pest()->in('Feature')
 |
 */
 
+// Bootstraps PHPacker
 function app()
 {
-    $app = new Application('phpacker', '1.0.0');
-    $dispatcher = new EventDispatcher;
+    return once(function () {
+        $app = new Application('phpacker', 'test');
+        $dispatcher = new EventDispatcher;
 
-    ConfigManager::bootstrap($dispatcher);
+        ConfigManager::bootstrap($dispatcher);
 
-    $app->add(new Build);
-    $app->add(new Download);
+        $app->add(new Build);
+        $app->add(new Download);
 
-    $app->setDispatcher($dispatcher);
+        $app->setDispatcher($dispatcher);
 
-    return $app;
+        return $app;
+    });
 }
 
+// This is used to call the PHPacker commands for real.
+// Used for end to end testing of the executables.
 function command(string $name, array $arguments = [])
 {
     $command = new CommandTester(app()->find($name));
@@ -75,6 +84,37 @@ function command(string $name, array $arguments = [])
     return test()->expect($command);
 }
 
+// This is used to run a bootstrapped command so we can test the
+// config merge priority using the event pattern, mimicking how
+// the functionality is integrated with the app's commands.
+function commandDouble(array $input = [])
+{
+
+    $stub = once(function () {
+        $stub = new CommandDouble;
+
+        app()->add($stub);
+
+        return $stub;
+    });
+
+    $input = new ArrayInput([
+        'command' => 'stub',
+        ...$input,
+    ]);
+
+    $input->setInteractive(false);
+
+    $output = new BufferedOutput;
+
+    return test()->expect((object) [
+        'exit_code' => app()->doRun($input, $output),
+        'output' => $output->fetch(),
+    ]);
+}
+
+// Helper to assert on shell commands.
+// Used to execute the build executable.
 function shell(string $command)
 {
     $process = Process::fromShellCommandline($command);

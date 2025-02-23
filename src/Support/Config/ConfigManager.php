@@ -57,6 +57,7 @@ class ConfigManager
 
         // Dynamically merge config based on command input
         $dispatcher->addListener('console.command', function ($event) {
+
             // Guard rediscovery when one command calls another
             if (self::$loaded) {
                 return;
