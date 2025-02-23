@@ -151,8 +151,6 @@ class ConfigManager
         // 3. `phpacker.json` in the current working directory
         $configPath = Path::join(getcwd(), 'phpacker.json');
 
-        print_r($configPath);
-
         if (file_exists($configPath)) {
             info("Using config file at '{$configPath}'");
 
@@ -230,6 +228,7 @@ class ConfigManager
         $convert = [
             'src',
             'dest',
+            'ini',
         ];
 
         foreach ($convert as $key) {
