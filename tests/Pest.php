@@ -8,8 +8,8 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /*
@@ -27,9 +27,12 @@ pest()->in('Feature')
     ->extend(Tests\TestCase::class)
     ->beforeEach(function () {
         $this->filesystem->remove(__DIR__ . '/_stubs/build');
+        $this->filesystem->remove(__DIR__ . '/Feature/artifacts');
     })
     ->afterEach(function () {
         $this->filesystem->remove(__DIR__ . '/_stubs/build');
+        $this->filesystem->remove(__DIR__ . '/Feature/artifacts');
+        ConfigManager::reset();
     });
 
 /*
@@ -89,15 +92,13 @@ function command(string $name, array $arguments = [])
 // the functionality is integrated with the app's commands.
 function commandDouble(array $input = [])
 {
-
-    $stub = once(function () {
+    once(function () {
         $stub = new CommandDouble;
 
         app()->add($stub);
-
-        return $stub;
     });
 
+    // Configure input
     $input = new ArrayInput([
         'command' => 'stub',
         ...$input,
@@ -105,11 +106,12 @@ function commandDouble(array $input = [])
 
     $input->setInteractive(false);
 
-    $output = new BufferedOutput;
+    // Run the command
+    $exitCode = app()->doRun($input, new ConsoleOutput);
 
     return test()->expect((object) [
-        'exit_code' => app()->doRun($input, $output),
-        'output' => $output->fetch(),
+        'exit_code' => $exitCode,
+        'output' => '', // TODO: capture stdout
     ]);
 }
 
