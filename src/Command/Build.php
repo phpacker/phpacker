@@ -54,6 +54,7 @@ class Build extends Command
                 'command' => 'download',
                 'repository' => ConfigManager::get('repository'),
                 $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
+                $input->hasParameterOption(['--quiet', '-q']) ? '--quiet' : '',
             ]), $output);
 
             if ($downloadExitCode === Command::FAILURE) {

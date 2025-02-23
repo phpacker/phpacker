@@ -25,6 +25,11 @@ trait WithBuildArguments
             ConfigManager::set('src', $src);
         }
 
+        // No src set either from config or input
+        if (! ConfigManager::get('src')) {
+            throw new CommandErrorException('The --src option is required.');
+        }
+
         // Set dest relative to cwd when given
         if ($dest = $input->getOption('dest')) {
             ConfigManager::set('dest', $dest);
