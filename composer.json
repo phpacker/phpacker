@@ -40,7 +40,7 @@
                 "arm64": "bin/build/mac/mac-arm"
             },
             "win": {
-                "x86_64": "bin/build/win/win-x64.exe"
+                "x86_64": "bin/build/windows/windows-x64.exe"
             }
         },
         "thanks": [
