@@ -34,8 +34,9 @@ it('discovers ini in --src path', function () {
 
     commandDouble([
         '--src' => 'artifacts/app.php',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using ini file at 'artifacts/phpacker.ini'");
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using ini file at 'artifacts/phpacker.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FOO->toBe('BAR')
@@ -50,8 +51,9 @@ it('uses ini with --ini option', function () {
 
     commandDouble([
         '--ini' => 'artifacts/path-to/custom.ini',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using ini file at 'artifacts/phpacker.ini'");
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using ini file at 'artifacts/path-to/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FAS->toBe('BAS')
@@ -71,8 +73,10 @@ it('uses ini in loaded config with --config option', function () {
 
     commandDouble([
         '--config' => 'artifacts/path-to/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using ini file at '/artifacts/path-to/custom.ini'");
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/path-to/config.json'")
+        ->output->toContain("Using ini file at '" . getcwd() . "/artifacts/path-to/ini/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FAR->toBe('BAK')
@@ -89,7 +93,9 @@ it('uses ini in cwd', function () {
     chdir('./artifacts/cwd');
 
     // Execute command
-    commandDouble()->exit_code->toBe(Command::SUCCESS);
+    commandDouble()
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using ini file at 'phpacker.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FUG->toBe('GME')
@@ -109,7 +115,9 @@ it('gives ini precedence to --ini over --src', function () {
     commandDouble([
         '--src' => 'artifacts/app.php',
         '--ini' => 'artifacts/path-to/custom.ini',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using ini file at 'artifacts/path-to/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('INI_OPTION');
@@ -132,7 +140,10 @@ it('gives ini precedence to --ini over --config', function () {
     commandDouble([
         '--config' => 'artifacts/path-to/config.json',
         '--ini' => 'artifacts/ini-option/custom.ini',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/path-to/config.json'")
+        ->output->toContain("Using ini file at 'artifacts/ini-option/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('INI_OPTION');
@@ -153,7 +164,9 @@ it('gives ini precedence to --ini over cwd', function () {
 
     commandDouble([
         '--ini' => 'artifacts/ini-option/custom.ini',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using ini file at 'artifacts/ini-option/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('INI_OPTION');
@@ -175,7 +188,10 @@ it('gives ini precedence to --config over --src', function () {
     commandDouble([
         '--config' => 'artifacts/path-to/config.json',
         '--src' => 'artifacts/src-option/phpacker.ini',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/path-to/config.json'")
+        ->output->toContain("Using ini file at '" . getcwd() . "artifacts/path-to/config/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('CONFIG_OPTION');
@@ -200,7 +216,10 @@ it('gives ini precedence to --config over cwd', function () {
 
     commandDouble([
         '--config' => '../path-to/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at '../path-to/config.json'")
+        ->output->toContain("Using ini file at '" . __DIR__ . "artifacts/path-to/config/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('CONFIG_OPTION');
@@ -221,7 +240,9 @@ it('gives ini precedence to --src over cwd', function () {
 
     commandDouble([
         '--src' => '../src-option/phpacker.ini',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using ini file at '../src-option/phpacker.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('SRC_OPTION');

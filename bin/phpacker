@@ -5,7 +5,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use NunoMaduro\Collision\Provider;
 use PHPacker\PHPacker\Command\Build;
-use Symfony\Component\Filesystem\Path;
 use PHPacker\PHPacker\Command\Download;
 use Symfony\Component\Console\Application;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
