@@ -191,7 +191,7 @@ it('gives ini precedence to --config over --src', function () {
     ])
         ->exit_code->toBe(Command::SUCCESS)
         ->output->toContain("Using config file at 'artifacts/path-to/config.json'")
-        ->output->toContain("Using ini file at '" . getcwd() . "artifacts/path-to/config/custom.ini'");
+        ->output->toContain("Using ini file at '" . getcwd() . "/artifacts/path-to/config/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('CONFIG_OPTION');
@@ -219,7 +219,7 @@ it('gives ini precedence to --config over cwd', function () {
     ])
         ->exit_code->toBe(Command::SUCCESS)
         ->output->toContain("Using config file at '../path-to/config.json'")
-        ->output->toContain("Using ini file at '" . __DIR__ . "artifacts/path-to/config/custom.ini'");
+        ->output->toContain("Using ini file at '" . __DIR__ . "/artifacts/path-to/config/custom.ini'");
 
     expect(ConfigManager::get('ini'))
         ->FROM->toBe('CONFIG_OPTION');
