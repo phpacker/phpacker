@@ -1,0 +1,7 @@
+{
+    "main": "bin/phpacker",
+    "output": "bin/build/phphacker.phar",
+    "files": [
+        "config/phpacker.json"
+    ]
+}
