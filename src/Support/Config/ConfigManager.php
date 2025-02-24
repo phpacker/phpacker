@@ -3,6 +3,7 @@
 namespace PHPacker\PHPacker\Support\Config;
 
 use BadMethodCallException;
+use Laravel\Prompts\Prompt;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Command\Concerns\InteractsWithFiles;
@@ -57,11 +58,15 @@ class ConfigManager
 
         // Dynamically merge config based on command input
         $dispatcher->addListener('console.command', function ($event) {
-
             // Guard rediscovery when one command calls another
             if (self::$loaded) {
                 return;
             }
+
+            // TODO: Consider moving this to bootstrap?
+            // This ensures Prompts called from within the discovery process
+            // uses the current output stream. This way it's easier to test.
+            Prompt::setOutput($event->getOutput());
 
             $input = $event->getInput();
 
@@ -81,7 +86,7 @@ class ConfigManager
             );
 
             self::$loaded = true;
-        });
+        }, priority: 50);
     }
 
     public static function reset()

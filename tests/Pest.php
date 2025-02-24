@@ -7,8 +7,8 @@ use PHPacker\PHPacker\Command\Download;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Laravel\Prompts\Output\BufferedConsoleOutput;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -106,12 +106,21 @@ function commandDouble(array $input = [])
 
     $input->setInteractive(false);
 
+    $output = new BufferedConsoleOutput;
+
     // Run the command
-    $exitCode = app()->doRun($input, new ConsoleOutput);
+    $exitCode = app()->doRun($input, $output);
+
+    // Capture the buffered output
+    $output = $output->fetch();
+
+    // Use this for debugging - work out which output to assert to in tests
+    // print_r('output: ' . strlen($output) . ' ' . $output);
+    // echo PHP_EOL;
 
     return test()->expect((object) [
         'exit_code' => $exitCode,
-        'output' => '', // TODO: capture stdout
+        'output' => $output, // NOTE: This works because config manager changes the Prompts output stream
     ]);
 }
 

@@ -30,10 +30,9 @@ it('discovers config in src path', function () {
         'dest' => 'discovered',
     ]));
 
-    commandDouble([
-        '--src' => 'artifacts/app.php',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
+    commandDouble(['--src' => 'artifacts/app.php'])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/phpacker.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -47,9 +46,9 @@ it('uses config with --config option', function () {
         'dest' => 'foo/discovered-via-config-option',
     ]));
 
-    commandDouble([
-        '--config' => 'artifacts/nested/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
+    commandDouble(['--config' => 'artifacts/nested/config.json'])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/nested/config.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -65,7 +64,9 @@ it('uses config in cwd', function () {
     chdir('./artifacts/cwd');
 
     // Execute command
-    commandDouble()->exit_code->toBe(Command::SUCCESS);
+    commandDouble()
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at '" . getcwd() . "/phpacker.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -85,8 +86,9 @@ it('gives config precedence to --config over --src', function () {
     commandDouble([
         '--src' => 'artifacts/src/app.php',
         '--config' => 'artifacts/nested/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/nested/config.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -108,8 +110,9 @@ it('gives config precedence to --config over cwd', function () {
 
     commandDouble([
         '--config' => '../nested/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at '../nested/config.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -131,8 +134,9 @@ it('gives config precedence to --src over cwd', function () {
 
     commandDouble([
         '--src' => 'config-option/app.php',
-    ])->exit_code->toBe(Command::SUCCESS);
-    // ->output->toContain("Using config file at 'artifacts/phpacker.json'");
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'config-option/phpacker.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -148,7 +152,9 @@ it('loads src from config', function () {
 
     commandDouble([
         '--config' => 'artifacts/nested/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/nested/config.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
@@ -164,7 +170,9 @@ it('can use paths above config', function () {
 
     commandDouble([
         '--config' => 'artifacts/nested/two/config.json',
-    ])->exit_code->toBe(Command::SUCCESS);
+    ])
+        ->exit_code->toBe(Command::SUCCESS)
+        ->output->toContain("Using config file at 'artifacts/nested/two/config.json'");
 
     // The paths will be converted to be absolute path relative to the file they came from
     expect(ConfigManager::all())
