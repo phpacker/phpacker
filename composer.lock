@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3629c7d5bb36a1813f979ed5a70e7799",
+    "content-hash": "e6e71cf72d7e899f614298e2b883dba7",
     "packages": [
         {
             "name": "filp/whoops",
@@ -1564,6 +1564,65 @@
                 }
             ],
             "time": "2024-12-11T14:50:44+00:00"
+        },
+        {
+            "name": "cpx/cpx",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imliam/cpx.git",
+                "reference": "3d45a6e6ff0536fc5be3dff83080c94dddc3db7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imliam/cpx/zipball/3d45a6e6ff0536fc5be3dff83080c94dddc3db7f",
+                "reference": "3d45a6e6ff0536fc5be3dff83080c94dddc3db7f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2"
+            },
+            "bin": [
+                "cpx"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Cpx\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Liam Hammett",
+                    "email": "liam@liamhammett.com"
+                }
+            ],
+            "description": "Run any command from any composer package, even if it's not installed in your project.",
+            "keywords": [
+                "command",
+                "composer",
+                "package",
+                "run"
+            ],
+            "support": {
+                "docs": "https://cpx.dev",
+                "issues": "https://github.com/imliam/cpx/issues",
+                "source": "https://github.com/imliam/cpx"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/imliam",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-10-01T14:36:37+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -4325,5 +4384,8 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.4"
+    },
     "plugin-api-version": "2.6.0"
 }

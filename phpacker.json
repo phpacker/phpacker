@@ -1,0 +1,6 @@
+{
+    "platform": "all",
+    "src": "bin/build/phphacker.phar",
+    "dest": "bin/build",
+    "php": "8.4"
+}

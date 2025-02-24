@@ -16,7 +16,33 @@
             "email": "willem@leuver.ink"
         }
     ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "bamarni/composer-bin-plugin": true
+        },
+        "platform": {
+            "php": "8.4"
+        },
+        "bin-compat": "auto"
+    },
+    "bin": [
+        "vendor/bin/phpacker"
+    ],
     "extra": {
+        "binaries": {
+            "linux": {
+                "x86_64": "bin/build/linux/linux-x64",
+                "aarch64": "bin/build/linux/linux-arm"
+            },
+            "darwin": {
+                "x86_64": "bin/build/mac/mac-x64",
+                "arm64": "bin/build/mac/mac-arm"
+            },
+            "win": {
+                "x86_64": "bin/build/win/win-x64.exe"
+            }
+        },
         "thanks": [
             {
                 "name": "Static PHP CLI",
@@ -45,17 +71,17 @@
         "laravel/pint": "^1.20",
         "phpstan/phpstan": "^2.1",
         "pestphp/pest": "^3.7",
-        "symfony/process": "^7.2"
+        "symfony/process": "^7.2",
+        "cpx/cpx": "^1.0"
     },
     "scripts": {
         "test": "./vendor/bin/pest",
         "format": "./vendor/bin/pint",
-        "analyze": "./vendor/bin/phpstan"
+        "analyze": "./vendor/bin/phpstan",
+        "build": [
+            "cpx box compile",
+            "bin/phpacker build"
+        ]
     },
-    "minimum-stability": "stable",
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
-    }
+    "minimum-stability": "stable"
 }
