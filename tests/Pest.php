@@ -81,7 +81,7 @@ function app()
 // Used for end to end testing of the executables.
 function command(string $name, array $arguments = [])
 {
-    $application = app(); // Assuming this returns your Symfony Application
+    $application = app();
 
     // Configure application to not terminate
     $application->setAutoExit(false);
