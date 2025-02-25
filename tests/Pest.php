@@ -9,8 +9,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Laravel\Prompts\Output\BufferedConsoleOutput;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Console\Tester\ApplicationTester;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +71,7 @@ function app()
         $app->add(new Download);
 
         $app->setDispatcher($dispatcher);
+        $app->setAutoExit(false);
 
         return $app;
     });
@@ -80,16 +81,25 @@ function app()
 // Used for end to end testing of the executables.
 function command(string $name, array $arguments = [])
 {
-    $command = new CommandTester(app()->find($name));
+    $application = app(); // Assuming this returns your Symfony Application
 
-    $command->execute($arguments);
+    // Configure application to not terminate
+    $application->setAutoExit(false);
 
-    return test()->expect($command);
+    $applicationTester = new ApplicationTester($application);
+
+    $applicationTester->run([
+        $name,
+        ...$arguments,
+    ]);
+
+    return test()->expect($applicationTester);
 }
 
 // This is used to run a bootstrapped command so we can test the
 // config merge priority using the event pattern, mimicking how
 // the functionality is integrated with the app's commands.
+// TODO: This is probably easier using ApplicationTester - warrants test refactor?
 function commandDouble(array $input = [])
 {
     once(function () {

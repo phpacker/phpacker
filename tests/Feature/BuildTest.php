@@ -2,12 +2,21 @@
 
 use Symfony\Component\Console\Command\Command;
 
+beforeEach(function () {
+    $this->originalWorkingDirectory = getcwd();
+    chdir(__DIR__);
+});
+
+afterEach(function () {
+    chdir($this->originalWorkingDirectory);
+});
+
 it('builds for all platforms', function () {
-    $buildPath = __DIR__ . '/../_stubs/build';
+    $buildPath = '../_stubs/build';
 
     command('build', [
         'platform' => 'all',
-        '--src' => __DIR__ . '/../_stubs/app.php',
+        '--src' => '../_stubs/app.php',
         '--dest' => $buildPath,
         '--quiet',
     ])->getStatusCode()->toBe(Command::SUCCESS);
@@ -22,11 +31,11 @@ it('builds for all platforms', function () {
 });
 
 it('can run the executable', function () {
-    $buildPath = __DIR__ . '/../_stubs/build';
+    $buildPath = '../_stubs/build';
 
     command('build', [
         'platform' => 'all',
-        '--src' => __DIR__ . '/../_stubs/app.php',
+        '--src' => '../_stubs/app.php',
         '--dest' => $buildPath,
         '--quiet',
     ])->getStatusCode()->toBe(Command::SUCCESS);
@@ -45,16 +54,19 @@ it('can run the executable', function () {
 });
 
 it('injects ini', function () {
-    $buildPath = __DIR__ . '/../_stubs/build';
+    $buildPath = '../_stubs/build';
+
+    // Set these to some unlikely defaults
+    $this->filesystem->dumpFile('artifacts/phpacker.ini', <<< 'TXT'
+        memory_limit=16M
+        max_execution_time=999
+    TXT);
 
     command('build', [
         'platform' => 'all',
-        '--src' => __DIR__ . '/../_stubs/app-with-ini.php',
         '--dest' => $buildPath,
-        '--ini' => [
-            'TEST1' => 'Lazy Fox',
-            'TEST2' => 'Lorem Ipsum',
-        ],
+        '--src' => '../_stubs/app.php',
+        '--ini' => 'artifacts/phpacker.ini',
         '--quiet',
     ])->getStatusCode()->toBe(Command::SUCCESS);
 
@@ -68,6 +80,6 @@ it('injects ini', function () {
 
     shell($executable)
         ->isSuccessful()->toBeTrue()
-        ->getOutput()->toContain('TEST1: Lazy Fox')
-        ->getOutput()->toContain('TEST2: Lorem Ipsum');
+        ->getOutput()->toContain('memory_limit: 16M')
+        ->getOutput()->toContain('max_execution_time: 999');
 });

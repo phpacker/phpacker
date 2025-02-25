@@ -44,24 +44,26 @@ class Combine
 
         // print_r($config->all());
 
-        // Combine the files
+        // Check src path
         $srcPath = Path::join($config->get('src'));
         if (! file_exists($srcPath)) {
             throw new CommandErrorException("Source at {$srcPath} does not exit");
         }
 
+        // Make sure output path & file exist
         $outputPath = Path::join($buildDirectory, $platform, "{$platform}-{$arch}");
-        $iniPart = ''; // TODO Inject INI
 
         if ($platform === 'windows') {
             $outputPath .= '.exe';
         }
 
-        // Make sure output path & file exist
         $filesystem = new Filesystem;
         $filesystem->mkdir(dirname($outputPath), 0755);
         touch($outputPath);
         chmod($outputPath, 0755); // chmod +x
+
+        // Get encoded INI definitions
+        $iniPart = self::encodeINI($config->get('ini'));
 
         // Combine all data in the output path
         $combined = file_get_contents($binPath) . $iniPart . file_get_contents($srcPath);
@@ -72,5 +74,33 @@ class Combine
         }
 
         return true;
+    }
+
+    private static function encodeINI(array $ini = []): string
+    {
+        if (empty($ini)) {
+            return '';
+        }
+
+        // Encode the INI definitions
+        $formatted = [];
+        foreach ($ini as $key => $val) {
+            if (is_array($val)) {
+                $formatted[] = "[{$key}]";
+                foreach ($val as $skey => $sval) {
+                    $formatted[] = "{$skey}=" . (is_numeric($sval) ? $sval : '"' . $sval . '"');
+                }
+            } else {
+                $formatted[] = "{$key}=" . (is_numeric($val) ? $val : '"' . $val . '"');
+            }
+        }
+
+        // Pack the definitions in a binary string
+        $iniString = implode("\n", $formatted);
+        $iniPart = "\xfd\xf6\x69\xe6";
+        $iniPart .= pack('N', strlen($iniString));
+        $iniPart .= $iniString;
+
+        return $iniPart;
     }
 }
