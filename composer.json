@@ -27,7 +27,7 @@
         "bin-compat": "auto"
     },
     "bin": [
-        "vendor/bin/phpacker"
+        "bin/phpacker"
     ],
     "extra": {
         "binaries": {
