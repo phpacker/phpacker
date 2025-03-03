@@ -30,6 +30,8 @@ Or as a project dependency:
 composer require phpacker/phpacker --dev
 ```
 
+<br />
+
 ## Quick Start
 
 Build an executable from your PHP script with a single command:
@@ -37,6 +39,8 @@ Build an executable from your PHP script with a single command:
 ```bash
 phpacker build --src=./app.php
 ```
+
+<br />
 
 ## Contributing
 
