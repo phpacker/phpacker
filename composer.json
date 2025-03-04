@@ -20,29 +20,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "bamarni/composer-bin-plugin": true
-        },
-        "platform": {
-            "php": "8.4"
-        },
-        "bin-compat": "auto"
+        }
     },
-    "bin": [
-        "vendor/bin/phpacker"
-    ],
     "extra": {
-        "binaries": {
-            "linux": {
-                "x86_64": "bin/build/linux/linux-x64",
-                "aarch64": "bin/build/linux/linux-arm"
-            },
-            "darwin": {
-                "x86_64": "bin/build/mac/mac-x64",
-                "arm64": "bin/build/mac/mac-arm"
-            },
-            "win": {
-                "x86_64": "bin/build/windows/windows-x64.exe"
-            }
-        },
         "thanks": [
             {
                 "name": "Static PHP CLI",
