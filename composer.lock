@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "566ec01a6e2c08446f9fa38cdf2352f8",
+    "content-hash": "862335873d1725dd783e9b6e00aaea41",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1026,20 +1026,21 @@
         },
         {
             "name": "phpacker/composer-installer",
-            "version": "0.2.1",
+            "version": "0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpacker/composer-installer.git",
-                "reference": "55b6af01a264d95772c838e7d7227ec1bb616b2d"
+                "reference": "aa467e02e7f20e1a3d12aa3cc071d6e2eb42e767"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpacker/composer-installer/zipball/55b6af01a264d95772c838e7d7227ec1bb616b2d",
-                "reference": "55b6af01a264d95772c838e7d7227ec1bb616b2d",
+                "url": "https://api.github.com/repos/phpacker/composer-installer/zipball/aa467e02e7f20e1a3d12aa3cc071d6e2eb42e767",
+                "reference": "aa467e02e7f20e1a3d12aa3cc071d6e2eb42e767",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^2.2.2",
+                "composer-runtime-api": "^2.2.2",
                 "composer/composer": "^2.2.2",
                 "symfony/finder": "^7.2"
             },
@@ -1068,9 +1069,9 @@
             "description": "Install hooks to distribute your PHPacker cross-platform executables through composer",
             "support": {
                 "issues": "https://github.com/phpacker/composer-installer/issues",
-                "source": "https://github.com/phpacker/composer-installer/tree/0.2.1"
+                "source": "https://github.com/phpacker/composer-installer/tree/0.2.4"
             },
-            "time": "2025-03-06T23:07:04+00:00"
+            "time": "2025-03-06T23:25:36+00:00"
         },
         {
             "name": "psr/container",
