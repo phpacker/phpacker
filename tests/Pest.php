@@ -99,7 +99,6 @@ function command(string $name, array $arguments = [])
 // This is used to run a bootstrapped command so we can test the
 // config merge priority using the event pattern, mimicking how
 // the functionality is integrated with the app's commands.
-// TODO: This is probably easier using ApplicationTester - warrants test refactor?
 function commandDouble(array $input = [])
 {
     once(function () {
