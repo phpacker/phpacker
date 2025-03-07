@@ -37,7 +37,7 @@ composer require phpacker/phpacker --dev
 Build a standalone executable from your PHP script with a single command:
 
 ```bash
-phpacker build --src=./app.php
+phpacker build --src=./app.phar
 ```
 
 <br />
