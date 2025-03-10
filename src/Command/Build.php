@@ -3,10 +3,10 @@
 namespace PHPacker\PHPacker\Command;
 
 use PHPacker\PHPacker\Support\Combine;
-use Symfony\Component\Console\Terminal;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
+use PHPacker\PHPacker\Command\Concerns\PrintsDots;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
@@ -25,6 +25,7 @@ use function Laravel\Prompts\table;
 )]
 class Build extends Command
 {
+    use PrintsDots;
     use WithBuildArguments;
 
     private const PLATFORMS = [
@@ -87,7 +88,7 @@ class Build extends Command
             foreach ($archs as $arch) {
                 // TODO: Extract Combine args to DTO? The config is dynamic and can
                 Combine::build($platform, $arch, ConfigManager::getRepository());
-                $this->printDots("{$platform} - {$arch}", 60, $output);
+                $this->printDots("{$platform} - {$arch}", '✅', $output);
             }
         }
 
@@ -101,16 +102,5 @@ class Build extends Command
         }, $ini, array_keys($ini));
 
         table(['  directive  ', '    value    '], $rows);
-    }
-
-    private function printDots(string $text, int $maxLength, OutputInterface $output)
-    {
-        $terminalWidth = (new Terminal)->getWidth();
-        $maxLength = min($maxLength - 2, $terminalWidth - 8);
-
-        $dots = str_repeat('·', 60);
-        $dots = str_repeat('·', $maxLength - strlen($text));
-
-        $output->writeln("  <options=bold>{$text}</> <fg=gray>{$dots}</> ✅");
     }
 }
