@@ -323,16 +323,16 @@
         },
         {
             "name": "phpacker/composer-installer",
-            "version": "0.3.1",
+            "version": "0.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpacker/composer-installer.git",
-                "reference": "d6268002f26424a26b5cd347a80b055f9fcdc618"
+                "reference": "64059a5ed1bf228b8877476cfc1052ad2ed394c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpacker/composer-installer/zipball/d6268002f26424a26b5cd347a80b055f9fcdc618",
-                "reference": "d6268002f26424a26b5cd347a80b055f9fcdc618",
+                "url": "https://api.github.com/repos/phpacker/composer-installer/zipball/64059a5ed1bf228b8877476cfc1052ad2ed394c3",
+                "reference": "64059a5ed1bf228b8877476cfc1052ad2ed394c3",
                 "shasum": ""
             },
             "require": {
@@ -367,9 +367,9 @@
             "description": "Install hooks to distribute your PHPacker cross-platform executables through composer",
             "support": {
                 "issues": "https://github.com/phpacker/composer-installer/issues",
-                "source": "https://github.com/phpacker/composer-installer/tree/0.3.1"
+                "source": "https://github.com/phpacker/composer-installer/tree/0.3.5"
             },
-            "time": "2025-03-07T18:31:19+00:00"
+            "time": "2025-03-10T20:04:25+00:00"
         },
         {
             "name": "psr/container",
@@ -2689,16 +2689,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.7",
+            "version": "2.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "12567f91a74036d56ba0af6d56c8e73ac0e8d850"
+                "reference": "f9adff3b87c03b12cc7e46a30a524648e497758f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/12567f91a74036d56ba0af6d56c8e73ac0e8d850",
-                "reference": "12567f91a74036d56ba0af6d56c8e73ac0e8d850",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f9adff3b87c03b12cc7e46a30a524648e497758f",
+                "reference": "f9adff3b87c03b12cc7e46a30a524648e497758f",
                 "shasum": ""
             },
             "require": {
@@ -2743,7 +2743,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-05T13:43:55+00:00"
+            "time": "2025-03-09T09:30:48+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
