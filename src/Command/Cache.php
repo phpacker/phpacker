@@ -36,7 +36,7 @@ class Cache extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('action', InputArgument::REQUIRED, 'Action to perform (info or clear)')
+            ->addArgument('action', InputArgument::OPTIONAL, 'Action to perform (list or clear)', default: 'list')
             ->addArgument('repository', InputArgument::OPTIONAL, 'Target binaries repository', self::DEFAULT_REPOSITORY);
     }
 
@@ -57,7 +57,7 @@ class Cache extends Command
         try {
 
             match ($input->getArgument('action')) {
-                'info' => $this->info($input, $output),
+                'list' => $this->info($input, $output),
                 'clear' => $this->clear($input, $output),
                 default => throw new InvalidArgumentException("You may only call 'info' or 'clear'")
             };
