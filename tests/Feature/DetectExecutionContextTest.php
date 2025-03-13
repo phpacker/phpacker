@@ -15,6 +15,10 @@ it('detects local environment', function () {
     // NOTE: the 'local' value is only picked predictably up when
     // the composer autoloader is required by the build srouce.
 
+    // Somehow GH actions won't pick it up otherwise
+    // This does work locally without workaround.
+    putenv('PHPACKER_ENV=local');
+
     shell('php ' . __DIR__ . '/../_stubs/app.php')
         ->isSuccessful()->toBeTrue()
         ->getOutput()->toContain('PHPACKER_ENV: local');
