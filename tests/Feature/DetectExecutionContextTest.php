@@ -12,8 +12,8 @@ afterEach(function () {
 });
 
 it('detects local environment', function () {
-    // NOTE: the 'local' value is only picked predictably up when
-    // the composer autoloader is required by the build srouce.
+    // NOTE: the 'local' value is only picked up predictably when
+    // the composer autoloader is required by the build source.
 
     // Somehow GH actions won't pick it up without setting it explicitly
     // This does work locally without workaround.
