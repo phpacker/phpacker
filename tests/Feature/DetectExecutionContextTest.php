@@ -12,6 +12,9 @@ afterEach(function () {
 });
 
 it('detects local environment', function () {
+    // NOTE: the 'local' value is only picked predictably up when
+    // the composer autoloader is required by the build srouce.
+
     shell('php ' . __DIR__ . '/../_stubs/app.php')
         ->isSuccessful()->toBeTrue()
         ->getOutput()->toContain('PHPACKER_ENV: local');
