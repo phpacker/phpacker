@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 (new Provider)->register();
 
-$application = new Application('phpacker', '1.0.0');
+$application = new Application('phpacker', '0.2.5');
 $dispatcher = new EventDispatcher();
 
 ConfigManager::bootstrap($dispatcher);
