@@ -65,15 +65,17 @@ class Combine
         // Get encoded INI definitions
         $iniPart = self::encodeINI($config->get('ini'));
 
+        /*
         // Bake in bootstrap code (workaround)
         $bootstrap = file_get_contents(__DIR__ . '/../bootstrap.php');
         $bootstrap = rtrim($bootstrap);
         if (substr($bootstrap, -2) !== '?>') {
-            $bootstrap .= '?>';
+            $bootstrap .= PHP_EOL . '?>';
         }
+        */
 
         // Combine all data in the output path
-        $combined = file_get_contents($binPath) . $iniPart . $bootstrap . file_get_contents($srcPath);
+        $combined = file_get_contents($binPath) . $iniPart . file_get_contents($srcPath);
         $result = file_put_contents($outputPath, $combined);
 
         if ($result === false) {

@@ -45,4 +45,4 @@ it('detects production environment', function () {
     shell($executable)
         ->isSuccessful()->toBeTrue()
         ->getOutput()->toContain('PHPACKER_ENV: production');
-});
+})->skip('reverting feature due to checksum issue when injecting code');
