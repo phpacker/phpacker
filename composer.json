@@ -5,8 +5,8 @@
     "license": "MIT",
     "autoload": {
         "files": [
-            "src/constants.php",
-            "src/env.php"
+            "src/bootstrap.php",
+            "src/constants.php"
         ],
         "psr-4": {
             "PHPacker\\PHPacker\\": "src/",
