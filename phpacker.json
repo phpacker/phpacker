@@ -2,5 +2,6 @@
     "platform": "all",
     "src": "bin/build/phphacker.phar",
     "dest": "bin/build",
+    "ini": "php.ini",
     "php": "8.4"
 }
