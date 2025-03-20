@@ -7,13 +7,13 @@ use NunoMaduro\Collision\Provider;
 use PHPacker\PHPacker\Command\Build;
 use PHPacker\PHPacker\Command\Cache;
 use PHPacker\PHPacker\Command\Download;
-use Symfony\Component\Console\Application;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
+use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 (new Provider)->register();
 
-$application = new Application('phpacker', '0.3.1');
+$application = new Application('phpacker', '0.3.2');
 $dispatcher = new EventDispatcher();
 
 ConfigManager::bootstrap($dispatcher);
