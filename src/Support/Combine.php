@@ -42,8 +42,6 @@ class Combine
             throw new CommandErrorException("PHP binary {$binPath} does not exit");
         }
 
-        // print_r($config->all());
-
         // Check src path
         $srcPath = Path::join($config->get('src'));
         if (! file_exists($srcPath)) {
@@ -64,15 +62,6 @@ class Combine
 
         // Get encoded INI definitions
         $iniPart = self::encodeINI($config->get('ini'));
-
-        /*
-        // Bake in bootstrap code (workaround)
-        $bootstrap = file_get_contents(__DIR__ . '/../bootstrap.php');
-        $bootstrap = rtrim($bootstrap);
-        if (substr($bootstrap, -2) !== '?>') {
-            $bootstrap .= PHP_EOL . '?>';
-        }
-        */
 
         // Combine all data in the output path
         $combined = file_get_contents($binPath) . $iniPart . file_get_contents($srcPath);
