@@ -3,7 +3,6 @@
 namespace PHPacker\PHPacker\Support;
 
 use Symfony\Component\Filesystem\Path;
-use PHPacker\PHPacker\Command\Download;
 use Symfony\Component\Filesystem\Filesystem;
 use PHPacker\PHPacker\Support\Config\ConfigRepository;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
@@ -27,11 +26,8 @@ class Combine
         $repository = $config->get('repository');
         $buildDirectory = $config->get('dest');
 
-        $repositoryDir = $repository === Download::DEFAULT_REPOSITORY
-            ? Download::DEFAULT_REPOSITORY_DIR
-            : $repository;
-
-        $repositoryDir = Path::join(APP_DATA, 'binaries', $repositoryDir);
+        $assetManager = new AssetManager($repository);
+        $repositoryDir = $assetManager->baseDir();
 
         if (! file_exists($repositoryDir)) {
             throw new CommandErrorException("Repository {$repositoryDir} does not exit");
