@@ -29,7 +29,7 @@ class Combine
 
         $repositoryDir = $repository === Download::DEFAULT_REPOSITORY
             ? Download::DEFAULT_REPOSITORY_DIR
-            : $repository;
+            : str_replace(['/', '\\'], '-', $repository);
 
         $repositoryDir = Path::join(APP_DATA, 'binaries', $repositoryDir);
 
