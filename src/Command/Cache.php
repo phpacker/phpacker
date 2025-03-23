@@ -100,13 +100,8 @@ class Cache extends Command
             return;
         }
 
-        $repositoryDir = $this->assetManager()->baseDir();
+        $this->assetManager()->clearDirectory();
 
-        if (! is_dir($repositoryDir)) {
-            throw new CommandErrorException("{$this->repository} is not installed");
-        }
-
-        $filesystem->remove($repositoryDir);
         info("Cleared {$this->repository} binary downloads.");
     }
 }

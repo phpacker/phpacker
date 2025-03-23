@@ -104,6 +104,12 @@ class AssetManager
         }
     }
 
+    public function clearDirectory()
+    {
+        $filesystem = new Filesystem;
+        $filesystem->remove($this->repositoryDir);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Support
