@@ -27,29 +27,18 @@ class Cache extends Command
     use InteractsWithAssetManager;
     use PrintsDots;
 
-    const DEFAULT_REPOSITORY = 'phpacker/php-bin';
-    const DEFAULT_REPOSITORY_DIR = 'default';
-
     private string $repository;
-    private string $repositoryDir;
 
     protected function configure(): void
     {
         $this
             ->addArgument('action', InputArgument::OPTIONAL, 'Action to perform (list or clear)', default: 'list')
-            ->addArgument('repository', InputArgument::OPTIONAL, 'Target binaries repository', self::DEFAULT_REPOSITORY);
+            ->addArgument('repository', InputArgument::OPTIONAL, 'Target binaries repository', AssetManager::DEFAULT_REPOSITORY);
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-
         $this->repository = $input->getArgument('repository');
-
-        $dirName = $this->repository === self::DEFAULT_REPOSITORY
-            ? self::DEFAULT_REPOSITORY_DIR
-            : str_replace(['/', '\\'], '-', $this->repository);
-
-        $this->repositoryDir = Path::join(APP_DATA, 'binaries', $dirName);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -78,8 +67,7 @@ class Cache extends Command
         foreach ($directories as $directory) {
 
             $directoryName = basename($directory);
-            $manager = new AssetManager($directory);
-            $version = $manager->currentVersion();
+            $version = @file_get_contents(Path::join($directory, '_version'));
 
             if (empty($version)) {
                 $version = 'N/A';
@@ -112,11 +100,13 @@ class Cache extends Command
             return;
         }
 
-        if (! is_dir($this->repositoryDir)) {
+        $repositoryDir = $this->assetManager()->baseDir();
+
+        if (! is_dir($repositoryDir)) {
             throw new CommandErrorException("{$this->repository} is not installed");
         }
 
-        $filesystem->remove($this->repositoryDir);
+        $filesystem->remove($repositoryDir);
         info("Cleared {$this->repository} binary downloads.");
     }
 }

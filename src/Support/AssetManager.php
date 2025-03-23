@@ -11,9 +11,22 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 class AssetManager
 {
+    const DEFAULT_REPOSITORY = 'phpacker/php-bin';
+    const DEFAULT_REPOSITORY_DIR = 'default';
+
+    protected string $repository;
+    protected string $repositoryDir;
+
     public function __construct(
-        protected string $repositoryDir
+        string $repository
     ) {
+        $dirName = $repository === self::DEFAULT_REPOSITORY
+            ? self::DEFAULT_REPOSITORY_DIR
+            : str_replace(['/', '\\'], '-', $repository);
+
+        $this->repository = $repository;
+        $this->repositoryDir = Path::join(APP_DATA, 'binaries', $dirName);
+
         $this->prepareDirectory();
     }
 
@@ -25,6 +38,11 @@ class AssetManager
     public function setCurrentVersion(string $version)
     {
         file_put_contents(Path::join($this->repositoryDir, '_version'), $version);
+    }
+
+    public function baseDir(): ?string
+    {
+        return $this->repositoryDir;
     }
 
     public function unpack(string $zipPath, string $version)

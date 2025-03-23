@@ -8,6 +8,6 @@ trait InteractsWithAssetManager
 {
     protected function assetManager(): AssetManager
     {
-        return new AssetManager($this->repositoryDir);
+        return new AssetManager($this->repository);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PHPacker\PHPacker\Command;
 
-use Symfony\Component\Filesystem\Path;
+use PHPacker\PHPacker\Support\AssetManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -27,11 +27,7 @@ class Download extends Command
     use InteractsWithAssetManager;
     use InteractsWithRepository;
 
-    const DEFAULT_REPOSITORY = 'phpacker/php-bin';
-    const DEFAULT_REPOSITORY_DIR = 'default';
-
     private string $repository;
-    private string $repositoryDir;
 
     private ?string $currentVersion;
     private ?string $latestVersion;
@@ -39,7 +35,7 @@ class Download extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('repository', InputArgument::OPTIONAL, 'Target binaries repository', self::DEFAULT_REPOSITORY)
+            ->addArgument('repository', InputArgument::OPTIONAL, 'Target binaries repository', AssetManager::DEFAULT_REPOSITORY)
             ->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force fetch a fresh copy of the binaries', false);
     }
 
@@ -76,6 +72,7 @@ class Download extends Command
     protected function fetchLatest()
     {
         $releaseData = $this->repository()->releaseData();
+        $repositoryDir = $this->assetManager()->baseDir();
 
         if (! isset($releaseData['assets'])) {
             throw new CommandErrorException("No assets found in the release.\n");
@@ -87,8 +84,8 @@ class Download extends Command
 
         spin(
             message: $message,
-            callback: function () {
-                $zipPath = $this->repository()->downloadReleaseAssets($this->repositoryDir);
+            callback: function () use ($repositoryDir) {
+                $zipPath = $this->repository()->downloadReleaseAssets($repositoryDir);
                 $this->assetManager()->unpack($zipPath, $this->latestVersion);
             }
         );
@@ -100,11 +97,6 @@ class Download extends Command
     {
         $this->repository = $input->getArgument('repository');
 
-        $dirName = $this->repository === self::DEFAULT_REPOSITORY
-            ? self::DEFAULT_REPOSITORY_DIR
-            : str_replace(['/', '\\'], '-', $this->repository);
-
-        $this->repositoryDir = Path::join(APP_DATA, 'binaries', $dirName);
         $this->currentVersion = $this->assetManager()->currentVersion();
         $this->latestVersion = $this->repository()->latestVersion();
     }
