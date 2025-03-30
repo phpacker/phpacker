@@ -6,7 +6,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/phpacker/phpacker.svg)](https://packagist.org/packages/phpacker/phpacker)
 [![License](https://img.shields.io/github/license/phpacker/phpacker.svg)](LICENSE.md)
 
-PHPacker enables you to package any PHP script or PHAR into a standalone, cross-platform executable. It handles all the complexity of bundling PHP runtime with your application, making distribution simple and hassle-free.
+PHPacker enables you to package any PHP script or PHAR into a standalone, cross-platform executable. It handles all the complexity of bundling PHP with your application, making distribution simple and hassle-free.
 
 <br />
 
