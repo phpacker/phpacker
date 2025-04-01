@@ -20,8 +20,8 @@ class Prompt
 
         LaravelPrompt::setOutput($output);
 
-        // LaravelPrompt::fallbackWhen(PHP_OS_FAMILY === 'Windows');
-        LaravelPrompt::fallbackWhen(true);
+        LaravelPrompt::fallbackWhen(PHP_OS_FAMILY === 'Windows');
+        // LaravelPrompt::fallbackWhen(true);
 
         LaravelPrompt::interactive($input->isInteractive() && defined('STDIN') && stream_isatty(STDIN));
 
