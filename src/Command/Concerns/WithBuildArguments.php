@@ -2,8 +2,10 @@
 
 namespace PHPacker\PHPacker\Command\Concerns;
 
+use PHPacker\PHPacker\Support\Prompt;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 
 use function Laravel\Prompts\select;
@@ -18,8 +20,10 @@ trait WithBuildArguments
     /*
     * Prompt for all required inputs
     */
-    protected function handleInput(InputInterface $input, array $platforms): array
+    protected function handleInput(InputInterface $input, OutputInterface $output, array $platforms): array
     {
+        Prompt::bootstrap($input, $output);
+
         // Set src relative to cwd when given
         if ($src = $input->getOption('src')) {
             ConfigManager::set('src', $src);

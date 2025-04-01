@@ -74,7 +74,7 @@ class Build extends Command
 
     protected function build(InputInterface $input, OutputInterface $output)
     {
-        $targets = $this->handleInput($input, self::PLATFORMS);
+        $targets = $this->handleInput($input, $output, self::PLATFORMS);
 
         $input->validate();
 

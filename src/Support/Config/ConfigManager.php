@@ -3,7 +3,6 @@
 namespace PHPacker\PHPacker\Support\Config;
 
 use BadMethodCallException;
-use Laravel\Prompts\Prompt;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Console\Input\InputInterface;
 use PHPacker\PHPacker\Command\Concerns\InteractsWithFiles;
@@ -63,11 +62,6 @@ class ConfigManager
             if (self::$loaded) {
                 return;
             }
-
-            // TODO: Consider moving this to bootstrap?
-            // This ensures Prompts called from within the discovery process
-            // uses the current output stream. This way it's easier to test.
-            Prompt::setOutput($event->getOutput());
 
             $input = $event->getInput();
 
