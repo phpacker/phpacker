@@ -64,7 +64,6 @@ class ConfigManager
                 return;
             }
 
-            // TODO: Consider moving this to bootstrap?
             // This ensures Prompts called from within the discovery process
             // uses the current output stream. This way it's easier to test.
             Prompt::setOutput($event->getOutput());
