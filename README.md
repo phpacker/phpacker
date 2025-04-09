@@ -52,5 +52,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 
 ## Support
 
-- [Documentation](https://phpacker.github.io/docs)
+- [Documentation](https://phpacker.dev/docs)
 - [GitHub Issues](https://github.com/phpacker/phpacker/issues)
