@@ -18,9 +18,14 @@ class GitHub implements RemoteRepositoryService
             $url = "https://api.github.com/repos/{$this->repository}/releases/latest";
             $options = [
                 'http' => [
-                    'header' => 'User-Agent: PHPacker',
+                    'header' => ['User-Agent: PHPacker'],
                 ],
             ];
+
+            if (getenv('GITHUB_TOKEN')) {
+                $options['http']['header'][] = 'Authorization: Bearer ' . getenv('GITHUB_TOKEN');
+            }
+
             $context = stream_context_create($options);
             $response = @file_get_contents($url, false, $context);
 
