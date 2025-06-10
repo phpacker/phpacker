@@ -1,6 +1,7 @@
 {
     "name": "phpacker/phpacker",
     "description": "Package a PHP script as a standalone cross-platform binary. Convenience wrapper around static-php & phpmicro using general-purpose php binaries",
+    "minimum-stability": "stable",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -45,10 +46,10 @@
     "require": {
         "laravel/prompts": "^0.3",
         "spatie/once": "^3.1",
-        "symfony/console": "^7.2",
-        "symfony/filesystem": "^7.2",
-        "symfony/finder": "^7.2",
-        "symfony/event-dispatcher": "^7.2",
+        "symfony/console": "^7.3",
+        "symfony/filesystem": "^7.3",
+        "symfony/finder": "^7.3",
+        "symfony/event-dispatcher": "^7.3",
         "phpacker/composer-installer": "^0.3"
     },
     "require-dev": {
@@ -67,6 +68,5 @@
             "cpx box compile",
             "bin/phpacker build"
         ]
-    },
-    "minimum-stability": "stable"
+    }
 }

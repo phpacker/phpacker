@@ -3,7 +3,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use NunoMaduro\Collision\Provider as CollisionProvider;
+use NunoMaduro\Collision;
 use PHPacker\PHPacker\Command\Build;
 use PHPacker\PHPacker\Command\Cache;
 use PHPacker\PHPacker\Command\Download;
@@ -13,10 +13,10 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 // Only enable Collision in development
 if(php_sapi_name() !== 'micro') {
-    (new CollisionProvider)->register();
+    (new Collision\Provider)->register();
 }
 
-$application = new Application('phpacker', '0.3.5');
+$application = new Application('phpacker', '0.4');
 $dispatcher = new EventDispatcher();
 
 ConfigManager::bootstrap($dispatcher);
