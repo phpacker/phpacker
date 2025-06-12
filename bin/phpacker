@@ -3,13 +3,17 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Dotenv\Dotenv;
 use NunoMaduro\Collision;
 use PHPacker\PHPacker\Command\Build;
 use PHPacker\PHPacker\Command\Cache;
 use PHPacker\PHPacker\Command\Download;
-use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\Console\Application;
+use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+
+$dotenv = Dotenv::createImmutable(getcwd());
+$dotenv->safeLoad();
 
 // Only enable Collision in development
 if(php_sapi_name() !== 'micro') {

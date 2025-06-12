@@ -22,8 +22,8 @@ class GitHub implements RemoteRepositoryService
                 ],
             ];
 
-            if (getenv('GITHUB_TOKEN')) {
-                $options['http']['header'][] = 'Authorization: Bearer ' . getenv('GITHUB_TOKEN');
+            if ($_ENV['GITHUB_TOKEN']) {
+                $options['http']['header'][] = 'Authorization: Bearer ' . $_ENV['GITHUB_TOKEN'];
             }
 
             $context = stream_context_create($options);
