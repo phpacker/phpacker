@@ -1,3 +1,5 @@
 /vendor/
 /bin/build/*.phar
 /.box_dump/
+/composer.lock
+/.env
