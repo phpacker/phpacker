@@ -3,5 +3,11 @@
     "src": "bin/build/phphacker.phar",
     "dest": "bin/build",
     "ini": "php.ini",
-    "php": "8.4"
+    "php": "8.4",
+    "updater": {
+        "provider": "github",
+        "github_branch": "main",
+        "github_repo": "phpacker",
+        "github_owner": "phpacker"
+    }
 }

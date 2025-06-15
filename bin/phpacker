@@ -8,6 +8,7 @@ use NunoMaduro\Collision;
 use PHPacker\PHPacker\Command\Build;
 use PHPacker\PHPacker\Command\Cache;
 use PHPacker\PHPacker\Command\Download;
+use PHPacker\PHPacker\Command\SelfUpdate;
 use Symfony\Component\Console\Application;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -20,7 +21,7 @@ if(php_sapi_name() !== 'micro') {
     (new Collision\Provider)->register();
 }
 
-$application = new Application('phpacker', '0.4');
+$application = new Application('phpacker', '0.5');
 $dispatcher = new EventDispatcher();
 
 ConfigManager::bootstrap($dispatcher);
@@ -28,6 +29,7 @@ ConfigManager::bootstrap($dispatcher);
 $application->add(new Build);
 $application->add(new Download);
 $application->add(new Cache);
+// $application->add(new SelfUpdate);
 
 $application->setDispatcher($dispatcher);
 $application->run();
