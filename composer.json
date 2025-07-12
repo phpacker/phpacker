@@ -4,9 +4,11 @@
     "minimum-stability": "stable",
     "type": "library",
     "license": "MIT",
+    "bin": [
+        "bin/phpacker"
+    ],
     "autoload": {
         "files": [
-            "src/bootstrap.php",
             "src/constants.php"
         ],
         "psr-4": {
@@ -22,12 +24,10 @@
     ],
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpacker/composer-installer": true
+            "pestphp/pest-plugin": true
         }
     },
     "extra": {
-        "phpacker-install": "phpacker",
         "thanks": [
             {
                 "name": "Static PHP CLI",

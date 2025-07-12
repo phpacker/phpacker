@@ -17,7 +17,7 @@ $dotenv = Dotenv::createImmutable(getcwd());
 $dotenv->safeLoad();
 
 // Only enable Collision in development
-if(php_sapi_name() !== 'micro') {
+if(class_exists(Collision\Provider::class)) {
     (new Collision\Provider)->register();
 }
 
