@@ -5,7 +5,7 @@
     "type": "library",
     "license": "MIT",
     "bin": [
-        "bin/phpacker"
+        "./bin/phpacker"
     ],
     "autoload": {
         "files": [
