@@ -4,9 +4,11 @@
     "minimum-stability": "stable",
     "type": "library",
     "license": "MIT",
+    "bin": [
+        "./bin/phpacker"
+    ],
     "autoload": {
         "files": [
-            "src/bootstrap.php",
             "src/constants.php"
         ],
         "psr-4": {
@@ -22,12 +24,10 @@
     ],
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpacker/composer-installer": true
+            "pestphp/pest-plugin": true
         }
     },
     "extra": {
-        "phpacker-install": "phpacker",
         "thanks": [
             {
                 "name": "Static PHP CLI",
@@ -50,7 +50,6 @@
         "symfony/filesystem": "^7",
         "symfony/finder": "^7",
         "symfony/event-dispatcher": "^7",
-        "phpacker/composer-installer": "^0.3",
         "vlucas/phpdotenv": "^5.6"
     },
     "require-dev": {
