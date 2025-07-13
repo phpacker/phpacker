@@ -50,7 +50,6 @@
         "symfony/filesystem": "^7",
         "symfony/finder": "^7",
         "symfony/event-dispatcher": "^7",
-        "phpacker/composer-installer": "^0.3",
         "vlucas/phpdotenv": "^5.6"
     },
     "require-dev": {
