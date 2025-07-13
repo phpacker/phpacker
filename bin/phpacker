@@ -16,20 +16,35 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 $dotenv = Dotenv::createImmutable(getcwd());
 $dotenv->safeLoad();
 
+$dispatcher = new EventDispatcher();
+ConfigManager::bootstrap($dispatcher);
+
 // Only enable Collision in development
 if(class_exists(Collision\Provider::class)) {
     (new Collision\Provider)->register();
 }
 
-$application = new Application('phpacker', '0.5');
-$dispatcher = new EventDispatcher();
+$application = new Application('phpacker', getVersion());
 
-ConfigManager::bootstrap($dispatcher);
-
+// Commands
 $application->add(new Build);
 $application->add(new Download);
 $application->add(new Cache);
-// $application->add(new SelfUpdate);
 
+// Compiled build only commands
+// if (php_sapi_name() === 'micro') {
+    // $application->add(new SelfUpdate);
+// }
+
+// Run the app
 $application->setDispatcher($dispatcher);
 $application->run();
+
+// We can't retreive the version from the ConfigManager since it's bootstrapped after the user invokes a command
+// This is only a issue since we use phpacker inside phpacker. Userland apps don't use the config manager
+// so they'll need to roll their own thing to do this anyway.
+function getVersion(): string {
+    $jsonData = file_get_contents(__DIR__. '/../phpacker.json');
+    $config = json_decode($jsonData, true);
+    return (string) $config['publisher']['version'];
+}
