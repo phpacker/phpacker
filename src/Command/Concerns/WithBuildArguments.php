@@ -17,6 +17,8 @@ use function Laravel\Prompts\multiselect;
  */
 trait WithBuildArguments
 {
+    const PHP_VERSIONS = ['8.2', '8.3', '8.4'];
+
     /*
     * Prompt for all required inputs
     */
@@ -49,7 +51,7 @@ trait WithBuildArguments
 
             $php = select(
                 'Select PHP version',
-                ['8.2', '8.3', '8.4']
+                self::PHP_VERSIONS
             );
         }
 
