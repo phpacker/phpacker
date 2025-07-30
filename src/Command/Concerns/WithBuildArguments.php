@@ -17,6 +17,8 @@ use function Laravel\Prompts\multiselect;
  */
 trait WithBuildArguments
 {
+    const PHP_VERSIONS = ['8.2', '8.3', '8.4'];
+
     /*
     * Prompt for all required inputs
     */
@@ -43,6 +45,17 @@ trait WithBuildArguments
         if ($ini = $this->promptIniInput($input)) {
             ConfigManager::set('ini', $ini);
         }
+
+        // Set php version (from config, argument or prompt)
+        if (! $php = $input->getOption('php')) {
+
+            $php = select(
+                'Select PHP version',
+                self::PHP_VERSIONS
+            );
+        }
+
+        ConfigManager::set('php', $php);
 
         // Get platform (from config, argument or prompt)
         $platform = ConfigManager::get('platform') ?? $input->getArgument('platform') ?: select(
