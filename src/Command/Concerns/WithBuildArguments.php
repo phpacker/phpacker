@@ -44,6 +44,17 @@ trait WithBuildArguments
             ConfigManager::set('ini', $ini);
         }
 
+        // Set php version (from config, argument or prompt)
+        if (! $php = $input->getOption('php')) {
+
+            $php = select(
+                'Select PHP version',
+                ['8.2', '8.3', '8.4']
+            );
+        }
+
+        ConfigManager::set('php', $php);
+
         // Get platform (from config, argument or prompt)
         $platform = ConfigManager::get('platform') ?? $input->getArgument('platform') ?: select(
             'Select platform',

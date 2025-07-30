@@ -44,6 +44,7 @@ class Build extends Command
             ->addOption('dest', 'd', InputOption::VALUE_REQUIRED, 'Path to the build directory')
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to config file (default: {src-dir}/phpacker.json)')
             ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)', false)
+            ->addOption('php', 'p', InputOption::VALUE_OPTIONAL, 'PHP version', ConfigManager::get('php'))
             ->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force fetch a fresh copy of the binaries', false);
     }
 

@@ -26,6 +26,7 @@ class SelfUpdate extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @phpstan-ignore-next-line */
         $updateManager = UpdateManager::make(__DIR__ . '/../../phpacker.json');
         $updateData = $updateManager->check();
 

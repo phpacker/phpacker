@@ -5,7 +5,7 @@
     "ini": "php.ini",
     "php": "8.4",
     "publisher": {
-        "version": "0.6.1",
+        "version": "0.6.2",
         "provider": "github",
         "github_branch": "main",
         "github_repo": "phpacker",
