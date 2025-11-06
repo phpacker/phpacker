@@ -1,6 +1,6 @@
 {
     "dest": "build",
-    "repository": "phpacker/php-bin",
+    "binary_src": "phpacker/php-bin",
     "force": false,
     "ini": false,
     "php": 8.4

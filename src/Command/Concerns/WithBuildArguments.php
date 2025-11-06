@@ -41,9 +41,14 @@ trait WithBuildArguments
             ConfigManager::set('dest', $dest);
         }
 
-        // Set executable name when given\
+        // Set executable name when given
         if ($filename = $input->getOption('filename')) {
             ConfigManager::set('filename', $filename);
+        }
+
+        // Set binary source when given
+        if ($binarySource = $input->getOption('binary-src')) {
+            ConfigManager::set('binary_src', $binarySource);
         }
 
         // Prompt for INI if needed

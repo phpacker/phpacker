@@ -24,7 +24,7 @@ class Combine
     {
         $filesystem = new Filesystem;
         $phpVersion = $config->get('php');
-        $repository = $config->get('repository');
+        $repository = $config->get('binary_src');
         $buildDirectory = $config->get('dest');
 
         $assetManager = new AssetManager($repository);

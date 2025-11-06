@@ -48,6 +48,7 @@ class Build extends Command
             ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)', false)
             ->addOption('php', 'p', InputOption::VALUE_OPTIONAL, 'PHP version', ConfigManager::get('php'))
             ->addOption('filename', 'name', InputOption::VALUE_OPTIONAL, 'The filename of the executable (default: {platform}-{arch})')
+            ->addOption('binary-src', 'b', InputOption::VALUE_OPTIONAL, 'PHP binaries repository (default: phpacker/php-bin)')
             ->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force fetch a fresh copy of the binaries', false);
     }
 
@@ -57,7 +58,7 @@ class Build extends Command
             // Fetch latest binaries
             $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
                 'command' => 'fetch',
-                'repository' => ConfigManager::get('repository'),
+                'repository' => ConfigManager::get('binary_src'),
                 $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
                 $input->hasParameterOption(['--quiet', '-q']) ? '--quiet' : '',
             ]), $output);
