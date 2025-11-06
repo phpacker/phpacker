@@ -2,7 +2,11 @@
 
 namespace PHPacker\PHPacker\Command;
 
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\table;
 use PHPacker\PHPacker\Support\Combine;
+use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,12 +16,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use PHPacker\PHPacker\Exceptions\CombineErrorException;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use PHPacker\PHPacker\Command\Concerns\WithBuildArguments;
-
-use function Laravel\Prompts\error;
-use function Laravel\Prompts\table;
 
 #[AsCommand(
     name: 'build',
@@ -45,6 +47,7 @@ class Build extends Command
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to config file (default: {src-dir}/phpacker.json)')
             ->addOption('ini', 'i', InputOption::VALUE_OPTIONAL, 'Path to ini file (default: {src-dir}/phpacker.ini)', false)
             ->addOption('php', 'p', InputOption::VALUE_OPTIONAL, 'PHP version', ConfigManager::get('php'))
+            ->addOption('filename', 'name', InputOption::VALUE_OPTIONAL, 'The filename of the executable (default: {platform}-{arch})')
             ->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force fetch a fresh copy of the binaries', false);
     }
 
@@ -75,7 +78,9 @@ class Build extends Command
 
     protected function build(InputInterface $input, OutputInterface $output)
     {
+        $filesystem = new Filesystem;
         $targets = $this->handleInput($input, $output, self::PLATFORMS);
+        $buildDirectory = ConfigManager::get('dest');
 
         $input->validate();
 
@@ -86,7 +91,11 @@ class Build extends Command
         }
 
         foreach ($targets as $platform => $archs) {
+
+
             foreach ($archs as $arch) {
+                $filesystem->remove(Path::join($buildDirectory, "{$platform}-{$arch}"));
+
                 // TODO: Extract Combine args to DTO? The config is dynamic and can
                 Combine::build($platform, $arch, ConfigManager::getRepository());
                 $this->printDots("{$platform} - {$arch}", '✅', $output);

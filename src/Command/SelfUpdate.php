@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
-use function Laravel\Prompts\spin;
 use function Laravel\Prompts\pause;
 
 #[AsCommand(
@@ -26,7 +25,6 @@ class SelfUpdate extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @phpstan-ignore-next-line */
         $updateManager = UpdateManager::make(__DIR__ . '/../../phpacker.json');
         $updateData = $updateManager->check();
 
@@ -43,10 +41,8 @@ class SelfUpdate extends Command
 
         // TODO: Consider udating the php binaries binaries too
 
-        spin(
-            fn () => $updateManager->update(),
-            "Installing update {$updateData->latestVersion}"
-        );
+        $output->writeln('<fg=cyan>⏳</fg=cyan> ' . "Installing update {$updateData->latestVersion}");
+        $updateManager->update();
 
         info('Update installed successfully!');
 

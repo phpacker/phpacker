@@ -1,11 +1,12 @@
 {
     "platform": "all",
     "src": "bin/build/phpacker.phar",
+    "filename": "phpacker",
     "dest": "bin/build",
     "ini": "php.ini",
     "php": "8.4",
     "publisher": {
-        "version": "0.6.3",
+        "version": "1.0.0",
         "provider": "github",
         "github_branch": "main",
         "github_repo": "phpacker",

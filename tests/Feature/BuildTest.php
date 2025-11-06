@@ -22,11 +22,31 @@ it('builds for all platforms', function () {
     ])->getStatusCode()->toBe(Command::SUCCESS);
 
     expect([
-        $buildPath . '/linux/linux-arm',
-        $buildPath . '/linux/linux-x64',
-        $buildPath . '/mac/mac-arm',
-        $buildPath . '/mac/mac-x64',
-        $buildPath . '/windows/windows-x64.exe',
+        $buildPath . '/linux-arm/linux-arm',
+        $buildPath . '/linux-x64/linux-x64',
+        $buildPath . '/mac-arm/mac-arm',
+        $buildPath . '/mac-x64/mac-x64',
+        $buildPath . '/windows-x64/windows-x64.exe',
+    ])->each->toBeFile();
+});
+
+it('supports custom executable names', function() {
+    $buildPath = '../_stubs/build';
+
+    command('build', [
+        'platform' => 'all',
+        '--src' => '../_stubs/app.php',
+        '--dest' => $buildPath,
+        '--filename' => 'foo-bar',
+        '--quiet',
+    ])->getStatusCode()->toBe(Command::SUCCESS);
+
+    expect([
+        $buildPath . '/linux-arm/foo-bar',
+        $buildPath . '/linux-x64/foo-bar',
+        $buildPath . '/mac-arm/foo-bar',
+        $buildPath . '/mac-x64/foo-bar',
+        $buildPath . '/windows-x64/foo-bar.exe',
     ])->each->toBeFile();
 });
 
@@ -41,11 +61,11 @@ it('can run the executable', function () {
     ])->getStatusCode()->toBe(Command::SUCCESS);
 
     $executable = [
-        'mac-arm' => $buildPath . '/mac/mac-arm',
-        'mac-x64' => $buildPath . '/mac/mac-x64',
-        'linux-arm' => $buildPath . '/linux/linux-arm',
-        'linux-x64' => $buildPath . '/linux/linux-x64',
-        'windows-x64' => $buildPath . '/windows/windows-x64.exe',
+        'mac-arm' => $buildPath . '/mac-arm/mac-arm',
+        'mac-x64' => $buildPath . '/mac-x64/mac-x64',
+        'linux-arm' => $buildPath . '/linux-arm/linux-arm',
+        'linux-x64' => $buildPath . '/linux-x64/linux-x64',
+        'windows-x64' => $buildPath . '/windows-x64/windows-x64.exe',
     ][getPlatform() . '-' . getArch()];
 
     shell($executable)
@@ -71,11 +91,11 @@ it('injects ini', function () {
     ])->getStatusCode()->toBe(Command::SUCCESS);
 
     $executable = [
-        'mac-arm' => $buildPath . '/mac/mac-arm',
-        'mac-x64' => $buildPath . '/mac/mac-x64',
-        'linux-arm' => $buildPath . '/linux/linux-arm',
-        'linux-x64' => $buildPath . '/linux/linux-x64',
-        'windows-x64' => $buildPath . '/windows/windows-x64.exe',
+        'mac-arm' => $buildPath . '/mac-arm/mac-arm',
+        'mac-x64' => $buildPath . '/mac-x64/mac-x64',
+        'linux-arm' => $buildPath . '/linux-arm/linux-arm',
+        'linux-x64' => $buildPath . '/linux-x64/linux-x64',
+        'windows-x64' => $buildPath . '/windows-x64/windows-x64.exe',
     ][getPlatform() . '-' . getArch()];
 
     shell($executable)

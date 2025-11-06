@@ -41,6 +41,11 @@ trait WithBuildArguments
             ConfigManager::set('dest', $dest);
         }
 
+        // Set executable name when given\
+        if ($filename = $input->getOption('filename')) {
+            ConfigManager::set('filename', $filename);
+        }
+
         // Prompt for INI if needed
         if ($ini = $this->promptIniInput($input)) {
             ConfigManager::set('ini', $ini);

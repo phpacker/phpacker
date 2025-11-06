@@ -7,6 +7,15 @@
     "bin": [
         "./bin/phpacker"
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../updater",
+            "options": {
+                "symlink": false
+            }
+        }
+    ],
     "autoload": {
         "files": [
             "src/constants.php"
@@ -50,6 +59,7 @@
         "symfony/filesystem": "^7",
         "symfony/finder": "^7",
         "symfony/event-dispatcher": "^7",
+        "phpacker/publisher": "dev-main",
         "vlucas/phpdotenv": "^5.6",
         "laravel/serializable-closure": "^2.0"
     },
@@ -68,6 +78,10 @@
         "build": [
             "cpx box compile",
             "bin/phpacker build"
+        ],
+        "release": [
+            "@composer run-script build",
+            "vendor/bin/phpacker-publisher release --no-interaction --verbose"
         ]
     }
 }

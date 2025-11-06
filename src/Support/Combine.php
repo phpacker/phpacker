@@ -22,6 +22,7 @@ class Combine
 
     public static function build(string $platform, string $arch, ConfigRepository $config)
     {
+        $filesystem = new Filesystem;
         $phpVersion = $config->get('php');
         $repository = $config->get('repository');
         $buildDirectory = $config->get('dest');
@@ -44,14 +45,14 @@ class Combine
             throw new CommandErrorException("Source at {$srcPath} does not exit");
         }
 
-        // Make sure output path & file exist
-        $outputPath = Path::join($buildDirectory, $platform, "{$platform}-{$arch}");
+        // Prep output path
+        $executableName = $config->get('filename') ?? "{$platform}-{$arch}";
+        $outputPath = Path::join($buildDirectory, "{$platform}-{$arch}", $executableName);
 
         if ($platform === 'windows') {
             $outputPath .= '.exe';
         }
 
-        $filesystem = new Filesystem;
         $filesystem->mkdir(dirname($outputPath), 0755);
         touch($outputPath);
         chmod($outputPath, 0755); // chmod +x
