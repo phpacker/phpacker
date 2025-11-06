@@ -7,7 +7,7 @@ use Dotenv\Dotenv;
 use NunoMaduro\Collision;
 use PHPacker\PHPacker\Command\Build;
 use PHPacker\PHPacker\Command\Cache;
-use PHPacker\PHPacker\Command\Download;
+use PHPacker\PHPacker\Command\Fetch;
 use PHPacker\PHPacker\Command\SelfUpdate;
 use Symfony\Component\Console\Application;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
@@ -28,7 +28,7 @@ $application = new Application('phpacker', getVersion());
 
 // Commands
 $application->add(new Build);
-$application->add(new Download);
+$application->add(new Fetch);
 $application->add(new Cache);
 
 // Compiled build only commands

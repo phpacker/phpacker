@@ -2,8 +2,6 @@
 
 namespace PHPacker\PHPacker\Command;
 
-use function Laravel\Prompts\error;
-use function Laravel\Prompts\table;
 use PHPacker\PHPacker\Support\Combine;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,10 +14,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use PHPacker\PHPacker\Support\Config\ConfigManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use PHPacker\PHPacker\Exceptions\CombineErrorException;
 use PHPacker\PHPacker\Exceptions\CommandErrorException;
 use PHPacker\PHPacker\Command\Concerns\WithBuildArguments;
+
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\table;
 
 #[AsCommand(
     name: 'build',
@@ -56,7 +56,7 @@ class Build extends Command
         try {
             // Fetch latest binaries
             $downloadExitCode = $this->getApplication()->doRun(new ArrayInput([
-                'command' => 'download',
+                'command' => 'fetch',
                 'repository' => ConfigManager::get('repository'),
                 $input->hasParameterOption(['--force', '-f']) ? '--force' : '',
                 $input->hasParameterOption(['--quiet', '-q']) ? '--quiet' : '',
@@ -91,7 +91,6 @@ class Build extends Command
         }
 
         foreach ($targets as $platform => $archs) {
-
 
             foreach ($archs as $arch) {
                 $filesystem->remove(Path::join($buildDirectory, "{$platform}-{$arch}"));

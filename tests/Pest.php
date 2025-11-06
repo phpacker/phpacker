@@ -2,8 +2,8 @@
 
 use Tests\_stubs\CommandDouble;
 use PHPacker\PHPacker\Command\Build;
+use PHPacker\PHPacker\Command\Fetch;
 use Symfony\Component\Process\Process;
-use PHPacker\PHPacker\Command\Download;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -68,7 +68,7 @@ function app()
         ConfigManager::bootstrap($dispatcher);
 
         $app->add(new Build);
-        $app->add(new Download);
+        $app->add(new Fetch);
 
         $app->setDispatcher($dispatcher);
         $app->setAutoExit(false);

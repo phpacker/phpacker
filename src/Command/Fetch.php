@@ -19,10 +19,10 @@ use function Laravel\Prompts\spin;
 use function Laravel\Prompts\error;
 
 #[AsCommand(
-    name: 'download',
+    name: 'fetch',
     description: 'Download the latest prebuilt PHP binaries'
 )]
-class Download extends Command
+class Fetch extends Command
 {
     use InteractsWithAssetManager;
     use InteractsWithRepository;
