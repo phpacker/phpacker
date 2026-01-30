@@ -47,7 +47,9 @@ class GitHub implements RemoteRepositoryService
             $response = curl_exec($ch);
             $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $error = curl_error($ch);
-            curl_close($ch);
+
+            // PHP 8.0+ automatically closes the CurlHandle when $ch goes out of scope.
+            // Explicit curl_close() is deprecated in PHP 8.5+.
 
             // Handle connection-level failures (DNS, SSL, Timeout)
             if ($response === false) {
@@ -121,10 +123,18 @@ class GitHub implements RemoteRepositoryService
         $success = curl_exec($ch);
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
-        curl_close($ch);
+
+        // PHP 8.0+ automatically handles resource cleanup for CurlHandle objects.
+        // Removed curl_close($ch).
+
         fclose($fp);
 
         if (! $success || $statusCode >= 400) {
+            // Clean up the empty/corrupted file if download failed
+            if (file_exists($zipPath)) {
+                @unlink($zipPath);
+            }
+
             $reason = $error ?: "HTTP Status {$statusCode}";
             throw new RepositoryRequestException("Failed to download release assets from '{$downloadUrl}': {$reason}");
         }
